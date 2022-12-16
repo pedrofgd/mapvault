@@ -27,9 +27,9 @@ public class NotesRepository : INotesRepository
       try
       {
          _notesCollection.InsertOne(note);
-      } catch (Exception ex) {
+      } catch (Exception) {
          _logger.LogError("Error while creating note");
-         throw ex;
+         throw;
       }
    }
 
@@ -38,9 +38,9 @@ public class NotesRepository : INotesRepository
       try
       {
          return await _notesCollection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
-      } catch (Exception ex) {
+      } catch (Exception) {
          _logger.LogError("Error while couting notes");
-         throw ex;
+         throw;
       }
    }
 
@@ -55,9 +55,9 @@ public class NotesRepository : INotesRepository
             .Find(new BsonDocument())
             .Project<FilteredNoteQueryDto>(projectFields)
             .ToListAsync();
-      } catch (Exception ex) {
+      } catch (Exception) {
          _logger.LogError("Error while getting notes");
-         throw ex;
+         throw;
       }
    }
 
@@ -70,9 +70,9 @@ public class NotesRepository : INotesRepository
          return await _notesCollection
             .Find(filter)
             .FirstOrDefaultAsync();
-      } catch (Exception ex) {
+      } catch (Exception) {
          _logger.LogError("Error while getting notes with id {Id}", id);
-         throw ex;
+         throw;
       }
    }
 }
