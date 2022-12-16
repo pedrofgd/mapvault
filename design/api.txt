@@ -1,0 +1,22 @@
+# API Design
+
+## Entities
+### Notes
+   * Id: uuid
+   * Title: string
+   * Categories: string[]
+   * ExceptionMessage: string
+   * Content: string (markdown file)
+
+## Endpoints
+CountNotes()
+   => Integer
+
+ListNotes(offset: integer, limit: integer, ?orderBy: string)
+   => Note[]
+
+GetNote(id: uuid)
+   => Note
+
+CreateNote(title: string, categories: string[], exMessage: string, content: string)
+   => OK
