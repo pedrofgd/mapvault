@@ -31,16 +31,19 @@ export default function New() {
                            <h2 className="my-0 ps-3">Criar novo</h2>
                         </div>
 
+                        {/* Titulo input */}
                         <div className="form-floating my-3">
                            <input type="text" className="form-control" id="floatingInput" />
                            <label htmlFor="floatingInput">Titulo</label>
                         </div>
 
+                        {/* Categorias input */}
                         <div className="form-floating my-3">
                            <input type="text" className="form-control" id="floatingInput" />
                            <label htmlFor="floatingInput">Categorias</label>
                         </div>
 
+                        {/* ExceptionMessage input */}
                         <div className="form-floating my-3">
                            <input type="text" className="form-control" id="floatingInput" />
                            <label htmlFor="floatingInput">Exception message (opcional)</label>
