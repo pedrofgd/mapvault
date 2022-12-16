@@ -1,12 +1,14 @@
 using Data;
 using Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using QueryModels;
 
 namespace Repositories;
 
 public class NotesRepository : INotesRepository
 {
-   private readonly IMongoCollection<Note> _db;
+   private readonly IMongoCollection<Note> _notesCollection;
    private readonly ILogger<NotesRepository> _logger;
 
    public NotesRepository(
@@ -17,14 +19,14 @@ public class NotesRepository : INotesRepository
 
       var db = dataContext.GetMongoDbConnection("mapvault");
       var collection = db.GetCollection<Note>("notes");
-      _db = collection ?? throw new ArgumentNullException(nameof(collection));
+      _notesCollection = collection ?? throw new ArgumentNullException(nameof(collection));
    }
 
    public void CreateNote(Note note, CancellationToken cancellationToken = default)
    {
       try
       {
-         _db.InsertOne(note);
+         _notesCollection.InsertOne(note);
       } catch (Exception ex) {
          _logger.LogError("Error while creating note");
          throw ex;
@@ -35,9 +37,26 @@ public class NotesRepository : INotesRepository
    {
       try
       {
-         return await _db.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
+         return await _notesCollection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
       } catch (Exception ex) {
          _logger.LogError("Error while couting notes");
+         throw ex;
+      }
+   }
+
+   public async Task<List<FilteredNoteQueryDto>> GetNotes(CancellationToken cancellationToken)
+   {
+      try
+      {
+         var projectFields = Builders<Note>.Projection
+            .Exclude(doc => doc.Content);
+
+         return await _notesCollection
+            .Find(new BsonDocument())
+            .Project<FilteredNoteQueryDto>(projectFields)
+            .ToListAsync();
+      } catch (Exception ex) {
+         _logger.LogError("Error while getting notes");
          throw ex;
       }
    }

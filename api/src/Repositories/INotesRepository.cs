@@ -1,4 +1,5 @@
 using Models;
+using QueryModels;
 
 namespace Repositories;
 
@@ -6,4 +7,5 @@ public interface INotesRepository
 {
    void CreateNote(Note note, CancellationToken cancellationToken = default);
    Task<long> CountNotes(CancellationToken cancellationToken = default);
+   Task<List<FilteredNoteQueryDto>> GetNotes(CancellationToken cancellationToken = default);
 }
