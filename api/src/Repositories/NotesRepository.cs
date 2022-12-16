@@ -25,10 +25,19 @@ public class NotesRepository : INotesRepository
       try
       {
          _db.InsertOne(note);
-      }
-      catch (Exception ex)
-      {
+      } catch (Exception ex) {
          _logger.LogError("Error while creating note");
+         throw ex;
+      }
+   }
+
+   public async Task<long> CountNotes(CancellationToken cancellationToken)
+   {
+      try
+      {
+         return await _db.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
+      } catch (Exception ex) {
+         _logger.LogError("Error while couting notes");
          throw ex;
       }
    }
