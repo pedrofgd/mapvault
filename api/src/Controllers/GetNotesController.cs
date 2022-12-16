@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Repositories;
 
 namespace Controllers;
@@ -27,5 +26,16 @@ public class GetNotesController : ControllerBase
    {
       var notes = await _notesRepository.GetNotes(cancellationToken);
       return Ok(notes);
+   }
+
+   [HttpGet]
+   [Route("notes/{id}")]
+   public async Task<IActionResult> GetNoteById(Guid id, CancellationToken cancellationToken)
+   {
+      var note = await _notesRepository.GetNoteById(id, cancellationToken);
+      if (note is null) 
+         return NotFound();
+
+      return Ok(note);
    }
 }
