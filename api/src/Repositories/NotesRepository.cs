@@ -60,4 +60,19 @@ public class NotesRepository : INotesRepository
          throw ex;
       }
    }
+
+   public async Task<Note> GetNoteById(Guid id, CancellationToken cancellationToken)
+   {
+      try
+      {
+         var filter = Builders<Note>.Filter.Eq(x => x.Id, id);
+
+         return await _notesCollection
+            .Find(filter)
+            .FirstOrDefaultAsync();
+      } catch (Exception ex) {
+         _logger.LogError("Error while getting notes with id {Id}", id);
+         throw ex;
+      }
+   }
 }
