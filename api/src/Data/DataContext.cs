@@ -24,9 +24,9 @@ public class DataContext
          var client = new MongoClient(connectionString);
          return client.GetDatabase(databaseName);
       }
-      catch (Exception ex) 
+      catch (Exception) 
       {
-         throw ex;
+         throw;
       }
    }
 }
