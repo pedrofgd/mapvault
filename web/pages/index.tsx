@@ -2,14 +2,14 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
-import { Note } from '../interfaces'
+import { NoteResume } from '../interfaces'
 import useSwr from 'swr'
 import styles from '../styles/Home.module.css'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
-  const { data, error } = useSwr<Note[]>('/api/notes', fetcher)
+  const { data, error } = useSwr<NoteResume[]>('/api/notes', fetcher)
 
   if (error) return <div>Failed to load users</div>
   if (!data) return <div>Loading...</div>
@@ -36,7 +36,7 @@ export default function Home() {
         <div className={styles.grid}>
           {data.map((note) => {
             return (
-              <Link key={note.id} href="/notes/note" className={styles.card}>
+              <Link key={note.id} href="/note/[id]" as={`/note/${note.id}`} className={styles.card}>
                 <h2>{note.title} &rarr;</h2>
                 <p>{note.exceptionMessage}</p>
                 <div>
