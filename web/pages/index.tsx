@@ -2,14 +2,14 @@ import Head from 'next/head'
 import Link from 'next/link'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
-import { ApiResponseDto, Note } from '../interfaces'
+import { Note } from '../interfaces'
 import useSwr from 'swr'
 import styles from '../styles/Home.module.css'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
-  const { data, error } = useSwr<ApiResponseDto>('/api/notes', fetcher)
+  const { data, error } = useSwr<Note[]>('/api/notes', fetcher)
 
   if (error) return <div>Failed to load users</div>
   if (!data) return <div>Loading...</div>
@@ -25,7 +25,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          16 vaults
+          {data.length} vaults
         </h1>
 
         {/* Botão de novo */}
@@ -34,13 +34,13 @@ export default function Home() {
         </Link>
 
         <div className={styles.grid}>
-          {data.notes.map((note) => {
+          {data.map((note) => {
             return (
-              <a key={note.id} href="https://nextjs.org/docs" className={styles.card}>
+              <Link key={note.id} href="/notes/note" className={styles.card}>
                 <h2>{note.title} &rarr;</h2>
                 <p>{note.exceptionMessage}</p>
                 <div>
-                  {note.categories.map((category) => {
+                  {note.categories?.map((category) => {
                     return (
                       <span key={category} className="badge text-bg-dark p-2 m-1">
                         {category}
@@ -48,7 +48,7 @@ export default function Home() {
                     )
                   })}
               </div>
-              </a>
+              </Link>
             )
           })}
         </div>
