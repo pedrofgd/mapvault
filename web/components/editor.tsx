@@ -1,5 +1,6 @@
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
+import { useEditor } from '../contexts/editor';
 
 const QuillNoSSRWrapper = dynamic(import('react-quill'), {
   ssr: false,
@@ -47,16 +48,15 @@ const formats = [
 ];
 
 export default function Editor() {
+  const { setContent } = useEditor()
+
   return (
     // Configuração do tamanho da fonte está em global.css
     <QuillNoSSRWrapper
       modules={modules}
       formats={formats}
       theme="snow"
-      onChange={(content) => {
-        // var htmlToRtf = require('html-to-rtf');
-        console.log('CONTETN: ', content);
-      }}
+      onChange={setContent}
     />
   );
 }
