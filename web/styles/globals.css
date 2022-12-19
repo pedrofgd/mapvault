@@ -2,7 +2,6 @@
 .ql-editor p, .ql-editor ol, .ql-editor ul, .ql-editor blockquote, .ql-editor h1, .ql-editor h2, .ql-editor h3, .ql-editor h4, .ql-editor h5, .ql-editor h6 {
   font-size: 0.95rem;
 }
-
 .ql-editor pre {
   font-size: 0.8rem;
 }

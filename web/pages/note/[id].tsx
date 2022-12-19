@@ -25,7 +25,7 @@ export default function NotePage() {
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
                <div className="col-8">
-                  <h1>{data.title}</h1>
+                  <h1 style={{width: "100%", overflowWrap: "break-word"}}>{data.title}</h1>
                   <h4>{data.exceptionMessage}</h4>
                   {data.categories?.map((category) => {
                      return (
@@ -35,10 +35,32 @@ export default function NotePage() {
                      )
                   })}
 
-                  <div className="quill my-4">
-                     <div className="ql-snow">
-                        <div className="ql-editor">
-                           {content}
+                  <div className="card mt-4">
+                     <div className="card-header">
+                        <div className="d-flex justify-content-between align-items-center">
+                           <div className="fw-light">
+                              <span className="text-muted">última modificação: {` `}</span>
+                              <span>19 dezembro 2022</span>
+
+                           </div>
+                           <div className="dropdown">
+                           <button className="btn btn-sm btn-outline-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              ...
+                           </button>
+                           <ul className="dropdown-menu">
+                              <li><a className="dropdown-item" href="#">Editar</a></li>
+                           </ul>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className="card-body py-0">
+                        <div className="quill my-4">
+                           <div className="ql-snow">
+                              <div className="ql-editor">
+                                 {content}
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>

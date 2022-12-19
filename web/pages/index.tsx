@@ -36,10 +36,20 @@ export default function Home() {
         <div className={styles.grid}>
           {data.map((note) => {
             return (
-              <Link key={note.id} href="/note/[id]" as={`/note/${note.id}`} className={styles.card}>
-                <h2>{note.title} &rarr;</h2>
-                <p>{note.exceptionMessage}</p>
-                <div>
+              <Link key={note.id} href="/note/[id]" as={`/note/${note.id}`} 
+                  className={styles.card}>
+                {/* Titulo */}
+                <h2 className={styles.titleWrap}>
+                  {note.title} &rarr;
+                </h2>
+                {/* Descricao */}
+                <div style={{height: "60px"}}>
+                  <p className={styles.textWrap}>
+                    {note.exceptionMessage}
+                  </p>
+                </div>
+                {/* Categorias */}
+                <div className={`${styles.overflowRowWithoutScrollBar} mt-2`}>
                   {note.categories?.map((category) => {
                     return (
                       <span key={category} className="badge text-bg-dark p-2 m-1">
