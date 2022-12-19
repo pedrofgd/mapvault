@@ -9,4 +9,5 @@ public interface INotesRepository
    Task<long> CountNotes(CancellationToken cancellationToken = default);
    Task<List<FilteredNoteQueryDto>> GetNotes(CancellationToken cancellationToken = default);
    Task<Note> GetNoteById(Guid id, CancellationToken cancellationToken = default);
+   Task DeleteNote(Guid id, CancellationToken cancellationToken = default);
 }
