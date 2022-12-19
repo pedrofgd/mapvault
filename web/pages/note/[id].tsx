@@ -37,7 +37,7 @@ export default function NotePage() {
    
       return (
          <div className="card-body py-0">
-            <div className="quill my-2">
+            <div className="quill">
                <div className="ql-snow">
                   <div className="ql-editor">
                      {parse(content)}
@@ -50,7 +50,7 @@ export default function NotePage() {
 
    function EditorBlock(content: string) {
       return (
-         <div className="p-3">
+         <div className="px-3">
             <Editor defaultContent={content} />
             <div className="d-flex justify-content-end mt-2">
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
@@ -79,8 +79,8 @@ export default function NotePage() {
                      )
                   })}
 
-                  <div className="card mt-4">
-                     <div className="card-header py-1">
+                  <div>
+                     <div className="pt-2">
                         <div className="d-flex justify-content-between align-items-center">
                            <div className="fw-light" style={{fontSize: "14px"}}>
                               <span className="text-muted">última modificação: {` `}</span>
@@ -88,7 +88,7 @@ export default function NotePage() {
 
                            </div>
                            <div className="dropdown">
-                           <button className="btn btn-sm" type="button" 
+                           <button className="btn" type="button" 
                               data-bs-toggle="dropdown" aria-expanded="false">
                               ...
                            </button>
@@ -102,9 +102,13 @@ export default function NotePage() {
                         </div>
                      </div>
 
-                     {editToogle == true 
-                        ? EditorBlock(data.content)
-                        : ViewNoteBlock(data.content) }
+                     <hr />
+
+                     <div style={{marginLeft: "-14px"}}>
+                        {editToogle == true 
+                           ? EditorBlock(data.content)
+                           : ViewNoteBlock(data.content) }
+                     </div>
                   </div>
                </div>
 
