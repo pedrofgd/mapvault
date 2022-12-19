@@ -75,4 +75,16 @@ public class NotesRepository : INotesRepository
          throw;
       }
    }
+
+   public async Task DeleteNote(Guid id, CancellationToken cancellationToken = default)
+   {
+      try
+      {
+         var deleteFilter = Builders<Note>.Filter.Eq(x => x.Id, id);
+         await _notesCollection.DeleteOneAsync(deleteFilter);
+      } catch (Exception) {
+         _logger.LogError("Error while deleting note with id {Id}", id);
+         throw;
+      }
+   }
 }
