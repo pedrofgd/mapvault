@@ -47,7 +47,11 @@ const formats = [
   'code-block'
 ];
 
-export default function Editor() {
+type Props = {
+  defaultContent?: string
+}
+
+const Editor: React.FC<Props> = ({ defaultContent }) => {
   const { setContent } = useEditor()
 
   return (
@@ -57,6 +61,9 @@ export default function Editor() {
       formats={formats}
       theme="snow"
       onChange={setContent}
+      defaultValue={defaultContent}
     />
   );
 }
+
+export default Editor
