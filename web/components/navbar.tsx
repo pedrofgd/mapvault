@@ -15,7 +15,7 @@ export default function Navbar() {
                   <li className="nav-item">
                      <a className="nav-link" 
                         aria-current="page" 
-                        href="#">Backup</a>
+                        href="#">Gerenciar</a>
                   </li>
                </ul>
 
