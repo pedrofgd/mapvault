@@ -51,12 +51,10 @@ export default function NotePage() {
    function EditorBlock(content: string) {
       return (
          <div className="pb-3">
-            <div style={{backgroundColor: "#F6F8FA"}}>
-               <div className="px-2">
-                  <Editor defaultContent={content} />
-               </div>
-               <hr />
+            <div className="px-3 pt-3">
+               <Editor defaultContent={content} />
             </div>
+            <hr />
             <div className="d-flex justify-content-end pe-3">
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={handleEditToogle}>Cancel</button>
@@ -136,8 +134,9 @@ export default function NotePage() {
                   </div>
                </div>
 
+               {/* Coluna direita */}
                <div className="col ms-3 mt-2">
-                  Histórico de modificações
+                  
                </div>
             </div>
          </main>
