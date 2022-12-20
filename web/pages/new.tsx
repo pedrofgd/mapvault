@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import Editor from '../components/editor'
 import Footer from '../components/footer'
 import Navbar from '../components/navbar'
@@ -17,8 +17,10 @@ export default function New() {
    const [exceptionMessage, setExceptionMessage] = useState('')
    const { content, setContent } = useEditor()
 
-   // Reset conteudo
-   setContent('')
+   useEffect(() => {
+      // Reset conteudo
+      setContent('')
+   }, [])
 
    const handleCreateNew = async(e: FormEvent) => {
       e.preventDefault();
@@ -30,7 +32,6 @@ export default function New() {
          exceptionMessage,
          content
       })
-      console.log(body)
 
       var response = await fetch('/api/notes/create', {
          method: 'POST',
