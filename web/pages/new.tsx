@@ -15,7 +15,10 @@ export default function New() {
    const [title, setTitle] = useState('')
    const [categories, setCategories] = useState('')
    const [exceptionMessage, setExceptionMessage] = useState('')
-   const { content } = useEditor()
+   const { content, setContent } = useEditor()
+
+   // Reset conteudo
+   setContent('')
 
    const handleCreateNew = async(e: FormEvent) => {
       e.preventDefault();
