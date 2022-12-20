@@ -36,7 +36,7 @@ export default function NotePage() {
       var parse = require('html-react-parser')
    
       return (
-         <div className="card-body py-0">
+         <div className="card-body py-3">
             <div className="quill">
                <div className="ql-snow">
                   <div className="ql-editor">
@@ -50,9 +50,12 @@ export default function NotePage() {
 
    function EditorBlock(content: string) {
       return (
-         <div className="px-3">
-            <Editor defaultContent={content} />
-            <div className="d-flex justify-content-end mt-2">
+         <div className="pb-3">
+            <div className="px-3 pt-3">
+               <Editor defaultContent={content} />
+            </div>
+            <hr />
+            <div className="d-flex justify-content-end pe-3">
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={handleEditToogle}>Cancel</button>
                <button type="button" className="btn btn-success btn-sm"
@@ -91,16 +94,25 @@ export default function NotePage() {
                      )
                   })}
 
-                  <div>
-                     <div className="pt-2">
+                  <div className="card mt-4">
+                      <div className="card-header py-1">
                         <div className="d-flex justify-content-between align-items-center">
                            <div className="fw-light" style={{fontSize: "14px"}}>
-                              <span className="text-muted">última modificação: {` `}</span>
-                              <span>19 dezembro 2022</span>
-
+                              {editToogle == true
+                                 ? (
+                                    <span className="fw-bold">Editando</span>
+                                 ) :
+                                 (
+                                    <div>
+                                       <span className="text-muted">última modificação: {` `}</span>
+                                       <span>19 dezembro 2022</span>
+                                    </div>
+                                 )
+                              }
+                              
                            </div>
                            <div className="dropdown">
-                           <button className="btn" type="button" 
+                           <button className="btn btn-sm" type="button" 
                               data-bs-toggle="dropdown" aria-expanded="false">
                               ...
                            </button>
@@ -114,9 +126,7 @@ export default function NotePage() {
                         </div>
                      </div>
 
-                     <hr />
-
-                     <div style={{marginLeft: "-14px"}}>
+                     <div>
                         {editToogle == true 
                            ? EditorBlock(data.content)
                            : ViewNoteBlock(data.content) }
@@ -124,8 +134,9 @@ export default function NotePage() {
                   </div>
                </div>
 
+               {/* Coluna direita */}
                <div className="col ms-3 mt-2">
-                  Histórico de modificações
+                  
                </div>
             </div>
          </main>
