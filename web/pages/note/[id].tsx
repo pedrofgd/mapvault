@@ -62,6 +62,18 @@ export default function NotePage() {
       )
    }
 
+   async function handleDeleteNote() {
+      var response = await fetch(`/api/notes/${data?.id}`, {
+         method: 'DELETE'
+      })
+
+      if (response.status != 200) {
+         alert('Erro ao deletar nota.')
+      } else {
+         router.push('/')
+      }
+   }
+
    return (
       <div className={styles.container}>
          <Navbar />
@@ -96,7 +108,7 @@ export default function NotePage() {
                               <li><button className="dropdown-item" onClick={handleEditToogle}>Editar</button></li>
                               <li><hr className="dropdown-divider"/></li>
                               <li><h6 className="dropdown-header">Ações na nota</h6></li>
-                              <li><a className="dropdown-item text-danger" href="#">Deletar tudo</a></li>
+                              <li><button className="dropdown-item text-danger" onClick={handleDeleteNote}>Deletar tudo</button></li>
                            </ul>
                            </div>
                         </div>
