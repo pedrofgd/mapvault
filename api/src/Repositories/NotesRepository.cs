@@ -33,6 +33,21 @@ public class NotesRepository : INotesRepository
       }
    }
 
+   public async Task<UpdateNoteResult> UpdateNote(Note editedNote, CancellationToken cancellationToken = default)
+   {
+      try
+      {
+         var replaceOneResult = await _notesCollection.ReplaceOneAsync(doc => doc.Id == editedNote.Id, editedNote);
+         return new UpdateNoteResult
+         {
+            Updated = replaceOneResult.ModifiedCount == 1
+         };
+      } catch(Exception) {
+         _logger.LogError("Error while updating note");
+         throw;
+      }
+   }
+
    public async Task<long> CountNotes(CancellationToken cancellationToken)
    {
       try

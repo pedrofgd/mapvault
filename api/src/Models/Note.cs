@@ -17,6 +17,4 @@ public class Note
    public string[]? Categories { get; private set; }
    public string? ExceptionMessage { get; private set; }
    public string? Content { get; private set; }
-
-   
 }
