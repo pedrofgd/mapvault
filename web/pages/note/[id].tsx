@@ -5,7 +5,7 @@ import styles from '../../styles/Home.module.css'
 import Editor from "../../components/editor"
 import Navbar from "../../components/navbar"
 import Footer from "../../components/footer"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useEditor } from "../../contexts/editor"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -16,21 +16,38 @@ export default function NotePage() {
    const { content, setContent } = useEditor()
    const [editToogle, setEditToogle] = useState(false)
 
-   function handleEditToogle() {
-      setEditToogle(!editToogle)
-   }
-
-   function handleEditNote() {
-      console.log("ok")
-      console.log(content)
-   }
-
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
+
+   useEffect(() => {
+      if (data)
+         setContent(data.content)
+   }, [data])
 
    if (error) return <div>Failed to load users</div>
    if (!data) return <div>Loading...</div>
 
-   setContent(data.content)
+   function handleEditToogle() {
+      setEditToogle(!editToogle)
+   }
+
+   async function handleUpdateNote() {
+      var body = JSON.stringify({
+         id: data?.id,
+         title: data?.title,
+         categories: data?.categories,
+         exceptionMessage: data?.exceptionMessage,
+         content: content
+      })
+      
+      var response = await fetch('/api/notes/update', {
+         method: 'PUT',
+         body
+      })
+      if (response.status == 200) {
+         alert('Nota editada com sucesso.');
+         handleEditToogle();
+      }
+   }
 
    function ViewNoteBlock(content: string) {
       var parse = require('html-react-parser')
@@ -59,7 +76,7 @@ export default function NotePage() {
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={handleEditToogle}>Cancel</button>
                <button type="button" className="btn btn-success btn-sm"
-                  onClick={handleEditNote}>Success</button>
+                  onClick={handleUpdateNote}>Success</button>
             </div>
          </div>
       )
