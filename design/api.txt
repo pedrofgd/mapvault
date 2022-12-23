@@ -22,3 +22,9 @@ GetNote(id: uuid)
 
 CreateNote(title: string, categories: string[], exMessage: string, content: string)
    => OK
+
+EditNote(id: uuid, title: string, categories: string[], exMessage: string, content: string)
+   => OK
+
+DeleteNote(id: uuid)
+   => OK
