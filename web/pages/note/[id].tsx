@@ -15,6 +15,9 @@ export default function NotePage() {
 
    const { content, setContent } = useEditor()
    const [editToogle, setEditToogle] = useState(false)
+   const [editTitleToogle, setEditTitleToogle] = useState(false)
+   const [editExMessageToogle, setEditExMessageToogle] = useState(false)
+   const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
 
@@ -82,6 +85,54 @@ export default function NotePage() {
       )
    }
 
+   function handleEditTitleToogle() {
+      setEditTitleToogle(!editTitleToogle)
+   }
+
+   function handleEditExMessageToogle() {
+      setEditExMessageToogle(!editExMessageToogle)
+   }
+
+   function handleEditCategoriesToogle() {
+      setEditCategoriesToogle(!editCategoriesToogle)
+   }
+
+   function EditTextInput(label: string, content: string, handler: () => void) {
+      return(
+         <div className="form-floating my-3">
+            <input 
+               type="text" className="form-control" id="floatingInput"
+               onChange={(e) => {console.log(e.target.value)}}
+               value={content} />
+            <label htmlFor="floatingInput">{label}</label>
+         </div>
+      )
+   }
+
+   function EditingButtonsBlock() {
+      return (
+         <div className="d-flex align-items-center justify-content-between">
+            <span style={{fontWeight: 'bold'}}>Editando...</span>
+
+            {/* Botoes */}
+            <div className="d-flex justify-content-end mt-2">
+               <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
+                  onClick={() => {
+                     setEditTitleToogle(false);
+                     setEditExMessageToogle(false);
+                     setEditCategoriesToogle(false);
+                  }}>Cancelar tudo</button>
+               <button type="button" className="btn btn-success btn-sm"
+                  onClick={() => {
+                     setEditTitleToogle(false);
+                     setEditExMessageToogle(false);
+                     setEditCategoriesToogle(false);
+                  }}>Salvar tudo</button>
+            </div>
+         </div>
+      )
+   }
+
    async function handleDeleteNote() {
       var response = await fetch(`/api/notes/${data?.id}`, {
          method: 'DELETE'
@@ -101,30 +152,55 @@ export default function NotePage() {
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
                <div className="col-8">
-                  <h1 style={{width: "100%", overflowWrap: "break-word"}}>{data.title}</h1>
-                  <h4 className="fw-light">{data.exceptionMessage}</h4>
-                  {data.categories?.map((category) => {
-                     return (
-                        <span key={category} className="badge text-bg-dark p-2 m-1">
-                           {category}
-                        </span>
-                     )
-                  })}
+                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                     ? EditingButtonsBlock()
+                     : null
+                  }
+
+                  {/* Titulo */}
+                  {editTitleToogle == true 
+                     ? EditTextInput('Editando o Título', data.title, handleEditTitleToogle)
+                     : <h1 style={{width: "100%", overflowWrap: "break-word", cursor: "pointer"}}
+                           onDoubleClick={handleEditTitleToogle}>{data.title}</h1>
+                  }
+
+                  {/* Exception message */}
+                  {editExMessageToogle == true
+                     ? EditTextInput('Editando Exception Message', data.exceptionMessage, handleEditExMessageToogle)
+                     : <h4 className="fw-light" style={{cursor: "pointer"}}
+                           onDoubleClick={handleEditExMessageToogle}>{data.exceptionMessage}</h4>
+                  }
+
+                  {/* Categorias */}
+                  {editCategoriesToogle
+                     ? EditTextInput('Editando Categorias', data.categories.join(', '), handleEditCategoriesToogle)
+                     : data.categories?.map((category) => {
+                        return (
+                           <span key={category} style={{cursor: 'pointer'}}
+                              className="badge text-bg-dark p-2 m-1"
+                              onDoubleClick={handleEditCategoriesToogle}>
+                              {category}
+                           </span>
+                        )
+                     })
+                  }
+
+                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                     ? <hr />
+                     : null
+                  }
 
                   <div className="card mt-4">
                       <div className="card-header py-1">
                         <div className="d-flex justify-content-between align-items-center">
                            <div className="fw-light" style={{fontSize: "14px"}}>
                               {editToogle == true
-                                 ? (
-                                    <span className="fw-bold">Editando</span>
-                                 ) :
-                                 (
-                                    <div>
-                                       <span className="text-muted">última modificação: {` `}</span>
-                                       <span>19 dezembro 2022</span>
-                                    </div>
-                                 )
+                                 ? <span className="fw-bold">Editando</span>
+                                 :
+                                 (<div>
+                                    <span className="text-muted">última modificação: {` `}</span>
+                                    <span>19 dezembro 2022</span>
+                                 </div>)
                               }
                               
                            </div>
@@ -133,7 +209,7 @@ export default function NotePage() {
                               data-bs-toggle="dropdown" aria-expanded="false">
                               ...
                            </button>
-                           <ul className="dropdown-menu">
+                           <ul className="dropdown-menu" style={{fontSize: "15px"}}>
                               <li><button className="dropdown-item" onClick={handleEditToogle}>Editar</button></li>
                               <li><hr className="dropdown-divider"/></li>
                               <li><h6 className="dropdown-header">Ações na nota</h6></li>
