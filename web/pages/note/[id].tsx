@@ -7,6 +7,7 @@ import Navbar from "../../components/navbar"
 import Footer from "../../components/footer"
 import { useEffect, useState } from "react"
 import { useEditor } from "../../contexts/editor"
+import { FiX } from 'react-icons/fi'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -15,16 +16,29 @@ export default function NotePage() {
 
    const { content, setContent } = useEditor()
    const [editToogle, setEditToogle] = useState(false)
+
    const [editTitleToogle, setEditTitleToogle] = useState(false)
+   const [title, setTitle] = useState('')
    const [editExMessageToogle, setEditExMessageToogle] = useState(false)
+   const [exMessage, setExMessage] = useState('')
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
+   const [categories, setCategories] = useState('')
+   const [categoriesArray, setCategoriesArray] = useState([''])
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
 
    useEffect(() => {
-      if (data)
+      if (data) {
          setContent(data.content)
+         setTitle(data.title)
+         setExMessage(data.exceptionMessage)
+         setCategories(data.categories.join(', '))
+      }
    }, [data])
+
+   useEffect(() => {
+      setCategoriesArray(categories.split(', '))
+   }, [categories])
 
    if (error) return <div>Failed to load users</div>
    if (!data) return <div>Loading...</div>
@@ -36,9 +50,9 @@ export default function NotePage() {
    async function handleUpdateNote() {
       var body = JSON.stringify({
          id: data?.id,
-         title: data?.title,
-         categories: data?.categories,
-         exceptionMessage: data?.exceptionMessage,
+         title: title,
+         categories: categoriesArray,
+         exceptionMessage: exMessage,
          content: content
       })
       
@@ -48,7 +62,8 @@ export default function NotePage() {
       })
       if (response.status == 200) {
          alert('Nota editada com sucesso.');
-         handleEditToogle();
+      } else {
+         alert('ERRO ao editar a nota.')
       }
    }
 
@@ -77,9 +92,12 @@ export default function NotePage() {
             <hr />
             <div className="d-flex justify-content-end pe-3">
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
-                  onClick={handleEditToogle}>Cancel</button>
+                  onClick={handleEditToogle}>Cancelar</button>
                <button type="button" className="btn btn-success btn-sm"
-                  onClick={handleUpdateNote}>Success</button>
+                  onClick={() => {
+                     handleUpdateNote();
+                     handleEditToogle();
+                  }}>Atualizar</button>
             </div>
          </div>
       )
@@ -97,14 +115,21 @@ export default function NotePage() {
       setEditCategoriesToogle(!editCategoriesToogle)
    }
 
-   function EditTextInput(label: string, content: string, handler: () => void) {
+   function EditTextInput(label: string, content: string, handler: () => void,
+      setOnChangeFunction: Function) {
       return(
-         <div className="form-floating my-3">
-            <input 
-               type="text" className="form-control" id="floatingInput"
-               onChange={(e) => {console.log(e.target.value)}}
-               value={content} />
-            <label htmlFor="floatingInput">{label}</label>
+         <div className="input-group my-3">
+            <div className="form-floating">
+               <input 
+                  type="text" className="form-control" id="floatingInput"
+                  onChange={(e) => {setOnChangeFunction(e.target.value)}}
+                  value={content} />
+               <label htmlFor="floatingInput">{label}</label>
+            </div>
+            <button className="btn btn-outline-secondary" type="button" id="button-addon2"
+               onClick={handler}>
+               <FiX />
+            </button>
          </div>
       )
    }
@@ -115,7 +140,7 @@ export default function NotePage() {
             <span style={{fontWeight: 'bold'}}>Editando...</span>
 
             {/* Botoes */}
-            <div className="d-flex justify-content-end mt-2">
+            <div className="d-flex justify-content-end mt-1">
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={() => {
                      setEditTitleToogle(false);
@@ -124,6 +149,7 @@ export default function NotePage() {
                   }}>Cancelar tudo</button>
                <button type="button" className="btn btn-success btn-sm"
                   onClick={() => {
+                     handleUpdateNote();
                      setEditTitleToogle(false);
                      setEditExMessageToogle(false);
                      setEditCategoriesToogle(false);
@@ -159,22 +185,22 @@ export default function NotePage() {
 
                   {/* Titulo */}
                   {editTitleToogle == true 
-                     ? EditTextInput('Editando o Título', data.title, handleEditTitleToogle)
+                     ? EditTextInput('Editando o Título', title, handleEditTitleToogle, setTitle)
                      : <h1 style={{width: "100%", overflowWrap: "break-word", cursor: "pointer"}}
-                           onDoubleClick={handleEditTitleToogle}>{data.title}</h1>
+                           onDoubleClick={handleEditTitleToogle}>{title}</h1>
                   }
 
                   {/* Exception message */}
                   {editExMessageToogle == true
-                     ? EditTextInput('Editando Exception Message', data.exceptionMessage, handleEditExMessageToogle)
+                     ? EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)
                      : <h4 className="fw-light" style={{cursor: "pointer"}}
-                           onDoubleClick={handleEditExMessageToogle}>{data.exceptionMessage}</h4>
+                           onDoubleClick={handleEditExMessageToogle}>{exMessage}</h4>
                   }
 
                   {/* Categorias */}
                   {editCategoriesToogle
-                     ? EditTextInput('Editando Categorias', data.categories.join(', '), handleEditCategoriesToogle)
-                     : data.categories?.map((category) => {
+                     ? EditTextInput('Editando Categorias', categoriesArray.join(', '), handleEditCategoriesToogle, setCategories)
+                     : categoriesArray?.map((category) => {
                         return (
                            <span key={category} style={{cursor: 'pointer'}}
                               className="badge text-bg-dark p-2 m-1"
