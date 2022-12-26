@@ -199,7 +199,7 @@ export default function NotePage() {
 
                   {/* Categorias */}
                   {editCategoriesToogle
-                     ? EditTextInput('Editando Categorias', categoriesArray.join(', '), handleEditCategoriesToogle, setCategories)
+                     ? EditTextInput('Editando Categorias', categories, handleEditCategoriesToogle, setCategories)
                      : categoriesArray?.map((category) => {
                         return (
                            <span key={category} style={{cursor: 'pointer'}}
