@@ -24,12 +24,22 @@ public class UpdateNoteController : ControllerBase
 
    [HttpPut]
    [Route("notes")]
-   public async Task<IActionResult> UpdateNote([FromBody] Note note)
+   public async Task<IActionResult> UpdateNote([FromBody] UpdateNoteRequestDto request)
    {
+      var note = await _notesRepository.GetNoteById(request.Id);
+      if (note is null)
+      {
+         _logger.LogError("Note not found for Id {Id}", request.Id);
+         return NotFound();
+      }
+
+      note.Update(request.Title, request.Categories, 
+         request.ExceptionMessage, request.Content);
+
       var updateResult = await _notesRepository.UpdateNote(note);
       if (!updateResult.Updated)
       {
-         _logger.LogWarning("Note could't be updated for received id {Id}", note.Id);
+         _logger.LogError("Note could't be updated for received id {Id}", note.Id);
          return BadRequest(new DefaultErrorResponse {ErrorMessage = "Couldn't update note. Check if the informed id is from an existent note"});
       }
 

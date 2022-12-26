@@ -64,7 +64,9 @@ public class NotesRepository : INotesRepository
       try
       {
          var projectFields = Builders<Note>.Projection
-            .Exclude(doc => doc.Content);
+            .Exclude(doc => doc.Content)
+            .Exclude(doc => doc.CreatedAt)
+            .Exclude(doc => doc.ModifiedAt);
 
          return await _notesCollection
             .Find(new BsonDocument())
