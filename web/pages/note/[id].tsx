@@ -261,7 +261,7 @@ export default function NotePage() {
                         modalId="confirmToDeleteNoteModal"
                         modalTitle="Confirme para deletar"
                         modalBody="Essa nota não poderá ser recuperada"
-                        leftButtonText="Deletar tudo"
+                        leftButtonText="Excluir definitivamente"
                         leftButtonClasses="btn text-danger"
                         leftButtonOnClickAction={handleDeleteNote}
                         rightButtonText="Cancelar"
