@@ -8,6 +8,7 @@ import Footer from "../../components/footer"
 import { useEffect, useState } from "react"
 import { useEditor } from "../../contexts/editor"
 import { FiX } from 'react-icons/fi'
+import Modal from "../../components/modal"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -24,6 +25,8 @@ export default function NotePage() {
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
    const [categories, setCategories] = useState('')
    const [categoriesArray, setCategoriesArray] = useState([''])
+   
+   const [confirmDeleteModalToogle, setConfirmDeleteModalToogle] = useState(false)
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
 
@@ -217,7 +220,7 @@ export default function NotePage() {
                   }
 
                   <div className="card mt-4">
-                      <div className="card-header py-1">
+                     <div className="card-header py-1">
                         <div className="d-flex justify-content-between align-items-center">
                            <div className="fw-light" style={{fontSize: "14px"}}>
                               {editToogle == true
@@ -231,19 +234,40 @@ export default function NotePage() {
                               
                            </div>
                            <div className="dropdown">
-                           <button className="btn btn-sm" type="button" 
-                              data-bs-toggle="dropdown" aria-expanded="false">
-                              ...
-                           </button>
-                           <ul className="dropdown-menu" style={{fontSize: "15px"}}>
-                              <li><button className="dropdown-item" onClick={handleEditToogle}>Editar</button></li>
-                              <li><hr className="dropdown-divider"/></li>
-                              <li><h6 className="dropdown-header">Ações na nota</h6></li>
-                              <li><button className="dropdown-item text-danger" onClick={handleDeleteNote}>Deletar tudo</button></li>
-                           </ul>
+                              <button className="btn btn-sm" type="button" 
+                                 data-bs-toggle="dropdown" aria-expanded="false">
+                                 ...
+                              </button>
+
+                              <ul className="dropdown-menu" style={{fontSize: "15px"}}>
+                                 <li><button className="dropdown-item" onClick={handleEditToogle}>Editar</button></li>
+                                 <li><hr className="dropdown-divider"/></li>
+                                 <li><h6 className="dropdown-header">Ações na nota</h6></li>
+
+                                 {/* Botao: Deletar tudo */}
+                                 <li>
+                                    {/* Button trigger modal */}
+                                    <button type="button" className="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#confirmToDeleteNoteModal">
+                                       Deletar tudo
+                                    </button>
+                                 </li>
+                              </ul>
                            </div>
                         </div>
                      </div>
+
+                     {/* Modal: Confirme para deletar */}
+                     <Modal
+                        modalId="confirmToDeleteNoteModal"
+                        modalTitle="Confirme para deletar"
+                        modalBody="Essa nota não poderá ser recuperada"
+                        leftButtonText="Deletar tudo"
+                        leftButtonClasses="btn text-danger"
+                        leftButtonOnClickAction={handleDeleteNote}
+                        rightButtonText="Cancelar"
+                        rightButtonClasses="btn btn-outline-secondary"
+                        rightButtonOnClickAction={() => undefined}
+                     />
 
                      <div>
                         {editToogle == true 
