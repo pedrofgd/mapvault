@@ -8,6 +8,8 @@ export type NoteResume = {
 export type Note = {
    id: string
    title: string,
+   createdAt: Date| null,
+   modifiedAt: Date | null,
    categories: string[],
    exceptionMessage: string,
    content: string

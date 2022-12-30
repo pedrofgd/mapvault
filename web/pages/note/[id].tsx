@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { useEditor } from "../../contexts/editor"
 import { FiX } from 'react-icons/fi'
 import Modal from "../../components/modal"
+import { FormatDateTimeToString } from "../../utils/dataFormater"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -25,8 +26,6 @@ export default function NotePage() {
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
    const [categories, setCategories] = useState('')
    const [categoriesArray, setCategoriesArray] = useState([''])
-   
-   const [confirmDeleteModalToogle, setConfirmDeleteModalToogle] = useState(false)
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
 
@@ -228,7 +227,9 @@ export default function NotePage() {
                                  :
                                  (<div>
                                     <span className="text-muted">última modificação: {` `}</span>
-                                    <span>19 dezembro 2022</span>
+                                    <span>{data.modifiedAt != null 
+                                       ? FormatDateTimeToString(data.modifiedAt)
+                                       : "não gravado"}</span>
                                  </div>)
                               }
                               
