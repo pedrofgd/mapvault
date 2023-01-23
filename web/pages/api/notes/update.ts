@@ -1,8 +1,8 @@
 import axios from "axios";
-import next, { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
-   await axios.put('http://localhost:5149/api/v1/notes',
+   await axios.put(`${process.env.BACKEND_BASE_URL}/api/v1/notes`,
       JSON.parse(_req.body))
       .then(response => {
          res.statusCode = 200
