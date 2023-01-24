@@ -7,9 +7,9 @@ services:
       - "5149:80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`ec2-54-162-129-145.compute-1.amazonaws.com`)"
+      - "traefik.http.routers.app.rule=Host(`ec2-54-162-129-145.compute-1.amazonaws.com`)"
 
-  traefik:
+  reverse-proxy:
     image: traefik:v2.9
     command:
       - "--api.insecure=true"
@@ -18,5 +18,5 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
-    volumes: 
+    volumes:
       - /var/run/docker.sock:/var/run/docker.sock
