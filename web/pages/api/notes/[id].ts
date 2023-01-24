@@ -9,11 +9,11 @@ export default async function noteHandler(req: NextApiRequest, res: NextApiRespo
 
    switch (method) {
       case 'GET':
-         const notes = await axios.get(`http://localhost:5149/api/v1/notes/${id}`);
+         const notes = await axios.get(`${process.env.BACKEND_BASE_URL}/api/v1/notes/${id}`);
          res.json(notes.data)
          break
       case 'DELETE':
-         axios.delete(`http://localhost:5149/api/v1/notes/${id}`)
+         axios.delete(`${process.env.BACKEND_BASE_URL}/api/v1/notes/${id}`)
          .then(response => {
             res.statusCode = 200
             res.setHeader('Content-Type', 'application/json');
