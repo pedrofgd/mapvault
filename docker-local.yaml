@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  api:
+    build: ./api
+    container_name: mapvault-api
+    ports:
+      - 5149:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MongoDb=mongodb://admin:01Senha!@host.docker.internal:27017
+
+  front:
+    build: ./web
+    container_name: mapvault-front
+    ports:
+      - 3000:3000
+    environment:
+      - BACKEND_BASE_URL=http://host.docker.internal:5149
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=01Senha!
