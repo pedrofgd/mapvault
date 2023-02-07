@@ -1,14 +1,15 @@
 version: '3'
 
 services:
-  front:
-    build: ./web
+  api:
+    build: .
+    container_name: mapvault-api
     ports:
-      - "3000:3000"
+      - "5149:80"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.front.rule=Host(`ec2-35-173-222-95.compute-1.amazonaws.com`)"
-      
+      - "traefik.http.routers.api.rule=Host(`ec2-3-85-109-69.compute-1.amazonaws.com`)"
+
   reverse-proxy:
     image: traefik:v2.9
     command:
