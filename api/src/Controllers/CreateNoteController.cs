@@ -1,25 +1,22 @@
-using Dtos;
+using MapVault.Dtos;
+using MapVault.Models;
+using MapVault.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Models;
-using Repositories;
 
-namespace Controllers;
+namespace MapVault.Controllers;
 
 [ApiController]
 [Route("api/v1")]
 public class CreateNoteController : ControllerBase
 {
    private readonly ILogger<CreateNoteController> _logger;
-   private readonly IConfiguration _configuration;
    private readonly INotesRepository _notesRepository;
 
    public CreateNoteController(
       ILogger<CreateNoteController> logger,
-      IConfiguration configuration,
       INotesRepository notesRepository)
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-      _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
       _notesRepository = notesRepository ?? throw new ArgumentNullException(nameof(notesRepository));
 
       _logger.LogInformation("CreateNoteController has been started");
@@ -31,7 +28,6 @@ public class CreateNoteController : ControllerBase
       CancellationToken cancellationToken)
    {
       var note = new Note(
-         Guid.NewGuid(), 
          request.Title, 
          request.Categories, 
          request.ExceptionMessage, 

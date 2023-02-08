@@ -1,7 +1,7 @@
-using Models;
-using QueryModels;
+using MapVault.Models;
+using MapVault.QueryModels;
 
-namespace Repositories;
+namespace MapVault.Repositories;
 
 public interface INotesRepository
 {
@@ -9,6 +9,6 @@ public interface INotesRepository
    Task<UpdateNoteResult> UpdateNote(Note editedNote, CancellationToken cancellationToken = default);
    Task<long> CountNotes(CancellationToken cancellationToken = default);
    Task<List<FilteredNoteQueryDto>> GetNotes(CancellationToken cancellationToken = default);
-   Task<Note> GetNoteById(Guid id, CancellationToken cancellationToken = default);
+   Task<Note?> GetNoteById(Guid id, CancellationToken cancellationToken = default);
    Task DeleteNote(Guid id, CancellationToken cancellationToken = default);
 }

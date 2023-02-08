@@ -1,4 +1,4 @@
-namespace QueryModels;
+namespace MapVault.QueryModels;
 
 public class UpdateNoteResult
 {

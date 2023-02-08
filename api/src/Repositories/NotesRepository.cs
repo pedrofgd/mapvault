@@ -1,10 +1,10 @@
-using Data;
-using Models;
+using MapVault.Data.MongoDb;
+using MapVault.Models;
+using MapVault.QueryModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using QueryModels;
 
-namespace Repositories;
+namespace MapVault.Repositories;
 
 public class NotesRepository : INotesRepository
 {
@@ -12,21 +12,19 @@ public class NotesRepository : INotesRepository
    private readonly ILogger<NotesRepository> _logger;
 
    public NotesRepository(
-      ILogger<NotesRepository> logger,
-      DataContext dataContext)
+      ILogger<NotesRepository> logger)
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
-      var db = dataContext.GetMongoDbConnection("mapvault");
-      var collection = db.GetCollection<Note>("notes");
-      _notesCollection = collection ?? throw new ArgumentNullException(nameof(collection));
+      
+      var mongoDatabase = MongoDbConnectionFactory.GetMongoDatabase();
+      _notesCollection = mongoDatabase.GetCollection<Note>(CollectionConstants.NotesCollection);
    }
 
    public void CreateNote(Note note, CancellationToken cancellationToken = default)
    {
       try
       {
-         _notesCollection.InsertOne(note);
+         _notesCollection.InsertOne(note, cancellationToken: cancellationToken);
       } catch (Exception) {
          _logger.LogError("Error while creating note");
          throw;
@@ -37,7 +35,11 @@ public class NotesRepository : INotesRepository
    {
       try
       {
-         var replaceOneResult = await _notesCollection.ReplaceOneAsync(doc => doc.Id == editedNote.Id, editedNote);
+         var replaceOneResult = await _notesCollection
+            .ReplaceOneAsync(
+               doc => doc.Id == editedNote.Id, 
+               editedNote, 
+               cancellationToken: cancellationToken);
          return new UpdateNoteResult
          {
             Updated = replaceOneResult.ModifiedCount == 1
@@ -71,14 +73,14 @@ public class NotesRepository : INotesRepository
          return await _notesCollection
             .Find(new BsonDocument())
             .Project<FilteredNoteQueryDto>(projectFields)
-            .ToListAsync();
+            .ToListAsync(cancellationToken: cancellationToken);
       } catch (Exception) {
          _logger.LogError("Error while getting notes");
          throw;
       }
    }
 
-   public async Task<Note> GetNoteById(Guid id, CancellationToken cancellationToken)
+   public async Task<Note?> GetNoteById(Guid id, CancellationToken cancellationToken)
    {
       try
       {
@@ -86,7 +88,7 @@ public class NotesRepository : INotesRepository
 
          return await _notesCollection
             .Find(filter)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
       } catch (Exception) {
          _logger.LogError("Error while getting notes with id {Id}", id);
          throw;
@@ -98,7 +100,7 @@ public class NotesRepository : INotesRepository
       try
       {
          var deleteFilter = Builders<Note>.Filter.Eq(x => x.Id, id);
-         await _notesCollection.DeleteOneAsync(deleteFilter);
+         await _notesCollection.DeleteOneAsync(deleteFilter, cancellationToken);
       } catch (Exception) {
          _logger.LogError("Error while deleting note with id {Id}", id);
          throw;

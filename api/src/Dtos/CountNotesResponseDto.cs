@@ -1,4 +1,4 @@
-namespace Dtos;
+namespace MapVault.Dtos;
 
 public class CountNotesResponseDto
 {
