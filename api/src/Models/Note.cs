@@ -2,8 +2,8 @@ namespace MapVault.Models;
 
 public class Note : Entity
 {
-   public DateTime CreatedAt { get; private set; }
-   public DateTime ModifiedAt { get; private set; }
+   public DateTime? CreatedAt { get; private set; }
+   public DateTime? ModifiedAt { get; private set; }
    public string? Title { get; private set; }
    public string[]? Categories { get; private set; }
    public string? ExceptionMessage { get; private set; }
