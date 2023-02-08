@@ -1,7 +1,7 @@
+using MapVault.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Repositories;
 
-namespace Controllers;
+namespace MapVault.Controllers;
 
 [ApiController]
 [Route("api/v1")]

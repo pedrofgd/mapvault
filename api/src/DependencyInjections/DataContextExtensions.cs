@@ -1,15 +1,14 @@
-using Data;
-using Repositories;
+using MapVault.Data;
+using MapVault.Repositories;
 
-namespace DependencyInjections;
+namespace MapVault.DependencyInjections;
 
-public static class DataContextExtansions
+public static class DataContextExtensions
 {
    public static IServiceCollection AddDataContextExtensions(
       this IServiceCollection services)
    {
       services
-         .AddScoped<DataContext>()
          .AddScoped<INotesRepository, NotesRepository>();
 
       return services;

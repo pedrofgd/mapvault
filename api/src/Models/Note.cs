@@ -1,9 +1,16 @@
-namespace Models;
+namespace MapVault.Models;
 
-public class Note
+public class Note : Entity
 {
-   public Note(Guid id, string? title, string[]? categories,
-      string? exceptionMessage, string? content)
+   public DateTime CreatedAt { get; private set; }
+   public DateTime ModifiedAt { get; private set; }
+   public string? Title { get; private set; }
+   public string[]? Categories { get; private set; }
+   public string? ExceptionMessage { get; private set; }
+   public string? Content { get; private set; }
+   
+   public Note(string? title, string[]? categories,
+      string? exceptionMessage, string? content, Guid id = default)
    {
       Id = id;
       CreatedAt = DateTime.UtcNow;
@@ -23,12 +30,4 @@ public class Note
       ExceptionMessage = exceptionMessage;
       Content = content;
    }
-
-   public Guid Id { get; private set; }
-   public DateTime CreatedAt { get; private set; }
-   public DateTime ModifiedAt { get; private set; }
-   public string? Title { get; private set; }
-   public string[]? Categories { get; private set; }
-   public string? ExceptionMessage { get; private set; }
-   public string? Content { get; private set; }
 }

@@ -1,9 +1,8 @@
-using Dtos;
+using MapVault.Dtos;
+using MapVault.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Models;
-using Repositories;
 
-namespace Controllers;
+namespace MapVault.Controllers;
 
 [ApiController]
 [Route("api/v1")]

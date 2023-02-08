@@ -1,12 +1,14 @@
-using DependencyInjections;
+using MapVault.DependencyInjections;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Add configuration to use AWS Parameter Store
 if (!builder.Environment.IsDevelopment())
-    builder.Configuration.AddSystemsManager("/mapvault");
+    configuration.AddSystemsManager("/mapvault");
 
 // Add services to the container.
+builder.Services.AddPersistenceExtensions(configuration);
 builder.Services.AddDataContextExtensions();
 
 builder.Services.AddControllers();
