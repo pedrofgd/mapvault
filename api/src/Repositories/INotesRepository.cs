@@ -11,4 +11,5 @@ public interface INotesRepository
 
    Task<long> CountNotes(CancellationToken cancellationToken);
    Task<List<SummaryNoteQueryDto>?> GetAllSummaryNotes(CancellationToken cancellationToken);
+   Task<List<string>> SearchNotesByTitle(string title, CancellationToken cancellationToken);
 }

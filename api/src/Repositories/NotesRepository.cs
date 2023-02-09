@@ -1,4 +1,3 @@
-using MapVault.Data.MongoDb;
 using MapVault.Models;
 using MapVault.QueryModels;
 using MongoDB.Bson;
@@ -8,21 +7,17 @@ namespace MapVault.Repositories;
 
 public class NotesRepository : RepositoryBase<Note>, INotesRepository
 {
-   private readonly IMongoCollection<Note> _notesCollection;
    private readonly ILogger<NotesRepository> _logger;
 
    public NotesRepository(ILogger<NotesRepository> logger) : 
       base(CollectionConstants.NotesCollection)
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-      
-      var mongoDatabase = MongoDbConnectionFactory.GetMongoDatabase();
-      _notesCollection = mongoDatabase.GetCollection<Note>(CollectionConstants.NotesCollection);
    }
    
    public async Task<long> CountNotes(CancellationToken cancellationToken)
    {
-      return await _notesCollection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
+      return await Collection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
    }
 
    public async Task<List<SummaryNoteQueryDto>?> GetAllSummaryNotes(CancellationToken cancellationToken)
@@ -35,7 +30,7 @@ public class NotesRepository : RepositoryBase<Note>, INotesRepository
 
       try
       {
-         return await _notesCollection
+         return await Collection
             .Find(new BsonDocument())
             .Project<SummaryNoteQueryDto>(projectionDefinition)
             .ToListAsync(cancellationToken: cancellationToken);
@@ -45,5 +40,15 @@ public class NotesRepository : RepositoryBase<Note>, INotesRepository
          _logger.LogError("Couldn't get summary notes. Error: {ExceptionMessage}", e.Message);
          return null;
       }
+   }
+
+   public async Task<List<string>> SearchNotesByTitle(string title, CancellationToken cancellationToken)
+   {
+      var filter = Builders<Note>.Filter.Regex(field => field.Title, 
+         new BsonRegularExpression($"{title}", "i"));
+      var cursor = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
+      var list = cursor.ToList(cancellationToken: cancellationToken);
+      
+      return !list.Any() ? new List<string>() : list.Select(x => x.Title).ToList()!;
    }
 }
