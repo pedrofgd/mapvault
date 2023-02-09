@@ -1,0 +1,26 @@
+# docker compose -p mapvault-prod -f docker-prod.yaml up -d
+
+version: '3.9'
+services:
+  api:
+    build: ./api
+    container_name: mapvault-api-production
+    ports:
+      - 5150:80
+    restart: always
+    volumes:
+      - $HOME/.aws/:/home/.aws/
+    environment:
+      # define the home folder; credentials will be read from $HOME/.aws
+      HOME: "/home"
+      # You can change which AWS CLI Profile is used
+      AWS_PROFILE: "default"
+
+  front:
+    build: ./web
+    container_name: mapvault-front-production
+    ports:
+      - 3001:3000
+    restart: always
+    environment:
+      - BACKEND_BASE_URL=http://host.docker.internal:5150
