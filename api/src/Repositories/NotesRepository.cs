@@ -6,104 +6,44 @@ using MongoDB.Driver;
 
 namespace MapVault.Repositories;
 
-public class NotesRepository : INotesRepository
+public class NotesRepository : RepositoryBase<Note>, INotesRepository
 {
    private readonly IMongoCollection<Note> _notesCollection;
    private readonly ILogger<NotesRepository> _logger;
 
-   public NotesRepository(
-      ILogger<NotesRepository> logger)
+   public NotesRepository(ILogger<NotesRepository> logger) : 
+      base(CollectionConstants.NotesCollection)
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       
       var mongoDatabase = MongoDbConnectionFactory.GetMongoDatabase();
       _notesCollection = mongoDatabase.GetCollection<Note>(CollectionConstants.NotesCollection);
    }
-
-   public void CreateNote(Note note, CancellationToken cancellationToken = default)
-   {
-      try
-      {
-         _notesCollection.InsertOne(note, cancellationToken: cancellationToken);
-      } catch (Exception) {
-         _logger.LogError("Error while creating note");
-         throw;
-      }
-   }
-
-   public async Task<UpdateNoteResult> UpdateNote(Note editedNote, CancellationToken cancellationToken = default)
-   {
-      try
-      {
-         var replaceOneResult = await _notesCollection
-            .ReplaceOneAsync(
-               doc => doc.Id == editedNote.Id, 
-               editedNote, 
-               cancellationToken: cancellationToken);
-         return new UpdateNoteResult
-         {
-            Updated = replaceOneResult.ModifiedCount == 1
-         };
-      } catch(Exception) {
-         _logger.LogError("Error while updating note");
-         throw;
-      }
-   }
-
+   
    public async Task<long> CountNotes(CancellationToken cancellationToken)
    {
-      try
-      {
-         return await _notesCollection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
-      } catch (Exception) {
-         _logger.LogError("Error while couting notes");
-         throw;
-      }
+      return await _notesCollection.CountDocumentsAsync(_ => true, cancellationToken: cancellationToken);
    }
 
-   public async Task<List<FilteredNoteQueryDto>> GetNotes(CancellationToken cancellationToken)
+   public async Task<List<SummaryNoteQueryDto>?> GetAllSummaryNotes(CancellationToken cancellationToken)
    {
+      var projectionDefinition = Builders<Note>.Projection
+         .Include(doc => doc.Id)
+         .Include(doc => doc.Title)
+         .Include(doc => doc.Categories)
+         .Include(doc => doc.ExceptionMessage);
+
       try
       {
-         var projectFields = Builders<Note>.Projection
-            .Exclude(doc => doc.Content)
-            .Exclude(doc => doc.CreatedAt)
-            .Exclude(doc => doc.ModifiedAt);
-
          return await _notesCollection
             .Find(new BsonDocument())
-            .Project<FilteredNoteQueryDto>(projectFields)
+            .Project<SummaryNoteQueryDto>(projectionDefinition)
             .ToListAsync(cancellationToken: cancellationToken);
-      } catch (Exception) {
-         _logger.LogError("Error while getting notes");
-         throw;
       }
-   }
-
-   public async Task<Note?> GetNoteById(Guid id, CancellationToken cancellationToken)
-   {
-      try
+      catch (Exception e)
       {
-         var filter = Builders<Note>.Filter.Eq(x => x.Id, id);
-
-         return await _notesCollection
-            .Find(filter)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-      } catch (Exception) {
-         _logger.LogError("Error while getting notes with id {Id}", id);
-         throw;
-      }
-   }
-
-   public async Task DeleteNote(Guid id, CancellationToken cancellationToken = default)
-   {
-      try
-      {
-         var deleteFilter = Builders<Note>.Filter.Eq(x => x.Id, id);
-         await _notesCollection.DeleteOneAsync(deleteFilter, cancellationToken);
-      } catch (Exception) {
-         _logger.LogError("Error while deleting note with id {Id}", id);
-         throw;
+         _logger.LogError("Couldn't get summary notes. Error: {ExceptionMessage}", e.Message);
+         return null;
       }
    }
 }

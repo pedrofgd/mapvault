@@ -18,14 +18,14 @@ public class UpdateNoteController : ControllerBase
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _notesRepository = repository ?? throw new ArgumentNullException(nameof(repository));
 
-      _logger.LogInformation("UpdateNoteController has been initialized");
+      _logger.LogInformation("UpdateNoteController has been started");
    }
 
    [HttpPut]
    [Route("notes")]
-   public async Task<IActionResult> UpdateNote([FromBody] UpdateNoteRequestDto request)
+   public async Task<IActionResult> UpdateNote([FromBody] UpdateNoteRequestDto request, CancellationToken cancellationToken)
    {
-      var note = await _notesRepository.GetNoteById(request.Id);
+      var note = await _notesRepository.GetByIdAsync(request.Id, cancellationToken);
       if (note is null)
       {
          _logger.LogError("Note not found for Id {Id}", request.Id);
@@ -35,13 +35,14 @@ public class UpdateNoteController : ControllerBase
       note.Update(request.Title, request.Categories, 
          request.ExceptionMessage, request.Content);
 
-      var updateResult = await _notesRepository.UpdateNote(note);
-      if (!updateResult.Updated)
+      var updateResult = await _notesRepository.SaveOrUpdateAsync(note, cancellationToken);
+      if (updateResult is false)
       {
-         _logger.LogError("Note could't be updated for received id {Id}", note.Id);
-         return BadRequest(new DefaultErrorResponse {ErrorMessage = "Couldn't update note. Check if the informed id is from an existent note"});
+         _logger.LogError("Couldn't update note with id {Id}", note.Id);
+         return BadRequest(new DefaultErrorResponse("Couldn't update note. The informed Id may not exists"));
       }
 
-      return Ok();
+      _logger.LogInformation("UpdateNote run successfully for id {Id}", note.Id);
+      return Ok(note);
    }
 }

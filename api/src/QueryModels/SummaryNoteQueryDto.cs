@@ -1,6 +1,6 @@
 namespace MapVault.QueryModels;
 
-public class FilteredNoteQueryDto
+public class SummaryNoteQueryDto
 {
    public Guid Id { get; set; }
    public string? Title { get; set; }

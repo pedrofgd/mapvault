@@ -1,3 +1,4 @@
+using MapVault.Dtos;
 using MapVault.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,11 +23,16 @@ public class DeleteNoteController : ControllerBase
 
    [HttpDelete]
    [Route("notes/{id}")]
-   public async Task<IActionResult> DeleteNote(Guid id, 
-      CancellationToken cancellationToken) 
+   public async Task<IActionResult> DeleteNote(Guid id, CancellationToken cancellationToken) 
    {      
-      await _notesRepository.DeleteNote(id, cancellationToken);
-
+      var deleteResult = await _notesRepository.DeleteByIdAsync(id, cancellationToken);
+      if (deleteResult is false)
+      {
+         _logger.LogError("Couldn't delete note for id {Id}", id);
+         return BadRequest(new DefaultErrorResponse($"Couldn't delete note. The informed Id may not exists"));
+      }
+      
+      _logger.LogInformation("DeleteNote run successfully for id {Id}", id);
       return Ok();
    }
 }

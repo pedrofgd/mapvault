@@ -19,7 +19,7 @@ public class CountNotesController : ControllerBase
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _notesRepository = notesRepository ?? throw new ArgumentNullException(nameof(notesRepository));
 
-      _logger.LogInformation("CountNotesController has been initializaed");
+      _logger.LogInformation("CountNotesController has been started");
    }
 
    [HttpGet]
@@ -28,6 +28,8 @@ public class CountNotesController : ControllerBase
    public async Task<IActionResult> CountNotes(CancellationToken cancellationToken)
    {
       var total = await _notesRepository.CountNotes(cancellationToken);
+      
+      _logger.LogInformation("CountNotes run successfully");
       return Ok(new CountNotesResponseDto {Total = total});
    }
 }
