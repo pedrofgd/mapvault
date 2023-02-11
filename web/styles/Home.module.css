@@ -123,6 +123,13 @@
   overflow: hidden;
 }
 
+.searchResultWrap {
+  width: 240px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis
+}
+
 .overflowRowWithoutScrollBar {
   display: flex;
   overflow: auto;

@@ -28,6 +28,7 @@ export default function NotePage() {
    const [categoriesArray, setCategoriesArray] = useState([''])
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
+   console.log(data)
 
    useEffect(() => {
       if (data) {
