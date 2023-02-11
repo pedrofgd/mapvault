@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Search from "./search";
 
 export default function Navbar() {
    return (
@@ -20,10 +21,7 @@ export default function Navbar() {
                </ul>
 
                {/* Pesquisa */}
-               <form className="d-flex" role="search">
-                  <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                  <button className="btn btn-outline-success" type="submit">Search</button>
-               </form>
+               <Search />
             </div>
          </div>
       </nav>

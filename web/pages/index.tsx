@@ -5,11 +5,19 @@ import Navbar from '../components/navbar'
 import { NoteResume } from '../interfaces'
 import useSwr from 'swr'
 import styles from '../styles/Home.module.css'
+import { useNote } from '../contexts/note'
+import { useEffect } from 'react'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
   const { data, error } = useSwr<NoteResume[]>('/api/notes', fetcher)
+  const { setSummaryNotes } = useNote()
+
+  useEffect(() => {
+    if (data)
+      setSummaryNotes(data)
+  }, [data])
 
   if (error) return <div>Failed to load users</div>
   if (!data) return <div>Loading...</div>
