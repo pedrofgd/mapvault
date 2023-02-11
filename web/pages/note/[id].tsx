@@ -28,7 +28,6 @@ export default function NotePage() {
    const [categoriesArray, setCategoriesArray] = useState([''])
 
    const { data, error } = useSwr<Note>(`/api/notes/${router.query.id}`, fetcher)
-   console.log(data)
 
    useEffect(() => {
       if (data) {
@@ -180,7 +179,7 @@ export default function NotePage() {
 
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
-               <div className="col-8">
+               <div className="col-9">
                   {editTitleToogle || editExMessageToogle || editCategoriesToogle
                      ? EditingButtonsBlock()
                      : null

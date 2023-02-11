@@ -1,5 +1,6 @@
-import { FormEvent } from "react"
+import { FormEvent, KeyboardEventHandler, useEffect } from "react"
 import { useState } from "react"
+import { Key } from "readline"
 import { useNote } from "../contexts/note"
 import { NoteResume } from "../interfaces"
 import styles from '../styles/Home.module.css'
@@ -13,31 +14,27 @@ export default function Search() {
       e.preventDefault()
       var regex = new RegExp(query, 'gi');
       setQueryResults(summaryNotes.filter(x => x.title.match(regex)))
+      console.log(queryResults)
    }
 
    return (
-      <>
-         <form className="d-flex" role="search" onChange={(e) => getQuery(e)}>
-            <div className="dropdown me-2">
-               <input 
-                  className="form-control dropdown-toggle"
-                  data-bs-toggle="dropdown" aria-expanded="false"
-                  type="search"
-                  placeholder="Search" 
-                  aria-label="Search"
-                  onChange={(e) => setQuery(e.target.value)}
-               />
-               <ul className="dropdown-menu mt-2">
-                  <li><h6 className="dropdown-header">Notas</h6></li>
-                  {queryResults.length > 0 
-                     ? queryResults.slice(0, 4).map(result => (
-                        <li><a className={`dropdown-item ${styles.searchResultWrap}`} href={`/note/${result.id}`}>{result.title}</a></li>
-                     ))
-                     : <li><a className="dropdown-item disabled">Nada encontrado</a></li>}
-               </ul>
-            </div>
-            <button className="btn btn-outline-success" type="submit">Search</button>
-         </form>
-      </>
+      <form className="d-flex dropdown-center" role="search" onChange={(e) => getQuery(e)}>
+         <input
+            className="form-control text-center bg-body-tertiary"
+            data-bs-toggle="dropdown" aria-expanded="false"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+            onChange={(e) => setQuery(e.target.value)}
+         />
+         <ul className={`dropdown-menu mt-2 shadow rounded border border-light ${styles.searchResultWrap}`}>
+            <li><h6 className="dropdown-header">Notas</h6></li>
+            {queryResults.length > 0 
+               ? queryResults.slice(0, 7).map(result => (
+                  <li key={result.id}><a className={`dropdown-item ${styles.searchResultWrap}`} href={`/note/${result.id}`}>{result.title}</a></li>
+               ))
+               : <li><a className={`dropdown-item disabled`}>Nada encontrado</a></li>}
+         </ul>
+      </form>
    )
 }
