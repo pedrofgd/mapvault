@@ -37,10 +37,10 @@ export default function New() {
          method: 'POST',
          body
       })
-
+      const nota = await response.json()
       if (response.status == 200) {
          alert('Nota criada com sucesso.')
-         router.push('/')
+         router.push(`/note/${nota.id}`)
       }
    }
 
