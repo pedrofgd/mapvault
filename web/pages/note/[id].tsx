@@ -179,7 +179,7 @@ export default function NotePage() {
 
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
-               <div className="col-9">
+               <div className="col-8">
                   {editTitleToogle || editExMessageToogle || editCategoriesToogle
                      ? EditingButtonsBlock()
                      : null

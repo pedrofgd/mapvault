@@ -1,6 +1,5 @@
-import { FormEvent, KeyboardEventHandler, useEffect } from "react"
+import { FormEvent } from "react"
 import { useState } from "react"
-import { Key } from "readline"
 import { useNote } from "../contexts/note"
 import { NoteResume } from "../interfaces"
 import styles from '../styles/Home.module.css'
@@ -14,7 +13,6 @@ export default function Search() {
       e.preventDefault()
       var regex = new RegExp(query, 'gi');
       setQueryResults(summaryNotes.filter(x => x.title.match(regex)))
-      console.log(queryResults)
    }
 
    return (
