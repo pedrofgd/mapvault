@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { useState } from "react";
 import { useView } from "../contexts/view";
 import Search from "./search";
+import Testing from "./testing";
 
 export default function Navbar() {
    const { viewsAvailable, view, setView } = useView();
@@ -26,12 +26,11 @@ export default function Navbar() {
                </ul>
             </div>
 
-            <div className="col-6">
+            <div className="col-6 px-4">
                <Search />
             </div>
 
-            <div className="col">
-            </div>
+            <Testing />
          </div>
       </nav>
    )
