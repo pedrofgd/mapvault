@@ -1,4 +1,4 @@
-export function IsTesting() {
-   var environment = process.env.NEXT_PUBLIC_ENVIRONMENT?.toString()!
-   return new RegExp('Testing', 'gi').test(environment)
+export function IsDevelopment() {
+   var environment = process.env.NODE_ENV?.toString()!
+   return new RegExp('development', 'gi').test(environment)
 }

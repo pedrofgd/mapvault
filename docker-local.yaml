@@ -17,8 +17,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - NEXT_PUBLIC_ENVIRONMENT=Testing
-      - NEXT_PUBLIC_BACKEND_BASE_URL=http://host.docker.internal:5149
+      - BACKEND_BASE_URL=http://host.docker.internal:5149
 
   mongodb:
     image: mongo:5.0

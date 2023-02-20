@@ -6,8 +6,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_ENVIRONMENT=Production
-      - NEXT_PUBLIC_BACKEND_BASE_URL=http://ec2-3-85-109-69.compute-1.amazonaws.com
+      - BACKEND_BASE_URL=http://ec2-3-85-109-69.compute-1.amazonaws.com
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.front.rule=Host(`ec2-3-90-32-206.compute-1.amazonaws.com`)"

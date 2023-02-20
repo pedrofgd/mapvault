@@ -2,7 +2,7 @@ import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
-   await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/api/v1/notes`,
+   await axios.put(`${process.env.BACKEND_BASE_URL}/api/v1/notes`,
       JSON.parse(_req.body))
       .then(response => {
          res.statusCode = 200
