@@ -9,12 +9,13 @@ import { useNote } from '../contexts/note'
 import { useEffect } from 'react'
 import CardsView from '../components/notesViews/cardsView'
 import { useView } from '../contexts/view'
+import ListView from '../components/notesViews/listView'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
   const { data, error } = useSwr<NoteResume[]>('/api/notes', fetcher)
-  const { setSummaryNotes } = useNote()
+  const { summaryNotes, setSummaryNotes } = useNote()
   const { view } = useView()
 
   useEffect(() => {
@@ -22,8 +23,24 @@ export default function Home() {
       setSummaryNotes(data)
   }, [data])
 
+  useEffect(() => {
+  }, [summaryNotes])
+
   if (error) return <div>Failed to load users</div>
   if (!data) return <div>Loading...</div>
+
+  function pickView(data: NoteResume[]) {
+    switch (view) {
+      case "Card":
+        return (<CardsView data={data} />)
+
+      case "List":
+        return (<ListView />)
+    
+      default:
+        return (null);
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -36,7 +53,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {data.length} vaults
+          {summaryNotes.length} vaults
         </h1>
 
         {/* Botão de novo */}
@@ -44,7 +61,7 @@ export default function Home() {
           <button className="btn btn-outline-success btn-lg" type="button">Novo</button>
         </Link>
 
-        { view === 'Card' ? <CardsView data={data} /> : null}
+        { pickView(data) }
 
       </main>
 

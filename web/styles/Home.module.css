@@ -93,6 +93,16 @@
   border-color: #0070f3;
 }
 
+.viewTitle {
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.viewTitle:hover,
+.viewTitle:focus,
+.viewTitle:active {
+  color: #0070f3;
+}
+
 .card h2 {
   margin: 0 0 1rem 0;
   font-size: 1.5rem;
@@ -144,6 +154,13 @@
   display: none;
 }
 
+.defaultHover {
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.defaultHover:hover {
+  opacity: 0.7;
+}
 
 @media (max-width: 600px) {
   .grid {
