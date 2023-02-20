@@ -7,12 +7,15 @@ import useSwr from 'swr'
 import styles from '../styles/Home.module.css'
 import { useNote } from '../contexts/note'
 import { useEffect } from 'react'
+import CardsView from '../components/notesViews/cardsView'
+import { useView } from '../contexts/view'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
   const { data, error } = useSwr<NoteResume[]>('/api/notes', fetcher)
   const { setSummaryNotes } = useNote()
+  const { view } = useView()
 
   useEffect(() => {
     if (data)
@@ -41,35 +44,8 @@ export default function Home() {
           <button className="btn btn-outline-success btn-lg" type="button">Novo</button>
         </Link>
 
-        <div className={styles.grid}>
-          {data.map((note) => {
-            return (
-              <Link key={note.id} href="/note/[id]" as={`/note/${note.id}`} 
-                  className={styles.card}>
-                {/* Titulo */}
-                <h2 className={styles.titleWrap}>
-                  {note.title} &rarr;
-                </h2>
-                {/* Descricao */}
-                <div style={{height: "60px"}}>
-                  <p className={styles.textWrap}>
-                    {note.exceptionMessage}
-                  </p>
-                </div>
-                {/* Categorias */}
-                <div className={`${styles.overflowRowWithoutScrollBar} mt-2`}>
-                  {note.categories?.map((category) => {
-                    return (
-                      <span key={category} className="badge text-bg-dark p-2 m-1">
-                        {category}
-                      </span>
-                    )
-                  })}
-              </div>
-              </Link>
-            )
-          })}
-        </div>
+        { view === 'Card' ? <CardsView data={data} /> : null}
+
       </main>
 
       <Footer />

@@ -6,18 +6,21 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import EditorProvider from '../contexts/editor'
 import NoteProvider from '../contexts/note';
+import ViewProvider from '../contexts/view';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <NoteProvider>
-      <EditorProvider>
-        <Head>
-          <title>Map Vault</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-        </Head>
-        
-        <Component {...pageProps} />
-      </EditorProvider>
-    </NoteProvider>
+    <ViewProvider>
+      <NoteProvider>
+        <EditorProvider>
+          <Head>
+            <title>Map Vault</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+          </Head>
+          
+          <Component {...pageProps} />
+        </EditorProvider>
+      </NoteProvider>
+    </ViewProvider>
   )
 }
