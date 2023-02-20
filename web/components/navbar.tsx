@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useView } from "../contexts/view";
+import { IsTesting } from "../utils/environment";
 import Search from "./search";
 import Testing from "./testing";
 
@@ -30,7 +31,10 @@ export default function Navbar() {
                <Search />
             </div>
 
-            <Testing />
+            <div className="col d-flex align-items-center">
+               {IsTesting() ? <Testing /> : null}
+            </div>
+            
          </div>
       </nav>
    )
