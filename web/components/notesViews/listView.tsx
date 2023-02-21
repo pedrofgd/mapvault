@@ -24,9 +24,12 @@ export default function ListView() {
 
    return (
       <div>
-         <p className='text-center text-danger-emphasis py-3'>
-            There's no confirmation for delete note in this view. Double click to delete.
-         </p>
+         { summaryNotes.length > 0
+            ? <p className='text-center text-danger-emphasis py-3'>
+               There's no confirmation for delete note in this view. Double click to delete.
+              </p>
+            : null}
+         
          <ul className="list-group list-group-flush">
             {summaryNotes.map(note => {
                return (
