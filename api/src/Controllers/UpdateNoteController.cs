@@ -32,7 +32,7 @@ public class UpdateNoteController : ControllerBase
          return NotFound();
       }
 
-      note.Update(request.Title, request.Categories, 
+      note.Update(request.Title, request.Categories, request.Description,
          request.ExceptionMessage, request.Content);
 
       var updateResult = await _notesRepository.SaveOrUpdateAsync(note, cancellationToken);
