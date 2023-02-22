@@ -20,7 +20,9 @@ const CardsView: React.FC<Props> = ({ data }) => {
                   {/* Descricao */}
                   <div style={{height: "60px"}}>
                   <p className={styles.textWrap}>
-                     {note.exceptionMessage}
+                     {note.exceptionMessage
+                        ? note.exceptionMessage
+                        : note.description}
                   </p>
                   </div>
                   {/* Categorias */}
