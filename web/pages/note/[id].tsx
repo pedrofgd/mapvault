@@ -21,6 +21,8 @@ export default function NotePage() {
 
    const [editTitleToogle, setEditTitleToogle] = useState(false)
    const [title, setTitle] = useState('')
+   const [editDescriptionToggle, setEditDescriptionToggle] = useState(false)
+   const [description, setDescription] = useState('')
    const [editExMessageToogle, setEditExMessageToogle] = useState(false)
    const [exMessage, setExMessage] = useState('')
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
@@ -33,6 +35,7 @@ export default function NotePage() {
       if (data) {
          setContent(data.content)
          setTitle(data.title)
+         setDescription(data.description)
          setExMessage(data.exceptionMessage)
          setCategories(data.categories.join(', '))
       }
@@ -107,6 +110,10 @@ export default function NotePage() {
 
    function handleEditTitleToogle() {
       setEditTitleToogle(!editTitleToogle)
+   }
+
+   function handleEditDescriptionToggle() {
+      setEditDescriptionToggle(!editDescriptionToggle)
    }
 
    function handleEditExMessageToogle() {
@@ -190,6 +197,13 @@ export default function NotePage() {
                      ? EditTextInput('Editando o Título', title, handleEditTitleToogle, setTitle)
                      : <h1 style={{width: "100%", overflowWrap: "break-word", cursor: "pointer"}}
                            onDoubleClick={handleEditTitleToogle}>{title}</h1>
+                  }
+
+                  {/* Description */}
+                  {editDescriptionToggle == true
+                     ? EditTextInput('Editando Description', description, handleEditDescriptionToggle, setDescription)
+                     : <h4 className="fw-light" style={{cursor: "pointer"}}
+                           onDoubleClick={handleEditDescriptionToggle}>{description}</h4>
                   }
 
                   {/* Exception message */}
