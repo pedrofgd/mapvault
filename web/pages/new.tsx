@@ -14,6 +14,7 @@ export default function New() {
 
    const [title, setTitle] = useState('')
    const [categories, setCategories] = useState('')
+   const [description, setDescription] = useState('')
    const [exceptionMessage, setExceptionMessage] = useState('')
    const { content, setContent } = useEditor()
 
@@ -29,6 +30,7 @@ export default function New() {
       var body = JSON.stringify({
          title,
          categories: categoriesArray,
+         description,
          exceptionMessage,
          content
       })
@@ -83,6 +85,14 @@ export default function New() {
                               type="text" className="form-control" id="floatingInput"
                               onChange={(e) => setCategories(e.target.value)} />
                            <label htmlFor="floatingInput">Categorias</label>
+                        </div>
+
+                        {/* Description input */}
+                        <div className="form-floating my-3">
+                           <input 
+                              type="text" className="form-control" id="floatingInput"
+                              onChange={(e) => setDescription(e.target.value)} />
+                           <label htmlFor="floatingInput">Description</label>
                         </div>
 
                         {/* ExceptionMessage input */}

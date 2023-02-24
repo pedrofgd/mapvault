@@ -10,6 +10,7 @@ import { useEditor } from "../../contexts/editor"
 import { FiX } from 'react-icons/fi'
 import Modal from "../../components/modal"
 import { FormatDateTimeToString } from "../../utils/dataFormater"
+import ExceptionMsgAccordion from "../../components/exceptionMsgAccordion"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -56,6 +57,7 @@ export default function NotePage() {
       var body = JSON.stringify({
          id: data?.id,
          title: title,
+         description: description,
          categories: categoriesArray,
          exceptionMessage: exMessage,
          content: content
@@ -153,15 +155,12 @@ export default function NotePage() {
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={() => {
                      setEditTitleToogle(false);
-                     setEditExMessageToogle(false);
-                     setEditCategoriesToogle(false);
+                     setAllEditingFieldsOff();
                   }}>Cancelar tudo</button>
                <button type="button" className="btn btn-success btn-sm"
                   onClick={() => {
                      handleUpdateNote();
-                     setEditTitleToogle(false);
-                     setEditExMessageToogle(false);
-                     setEditCategoriesToogle(false);
+                     setAllEditingFieldsOff();
                   }}>Salvar tudo</button>
             </div>
          </div>
@@ -180,6 +179,18 @@ export default function NotePage() {
       }
    }
 
+   function editing() {
+      return editTitleToogle || editExMessageToogle || 
+         editCategoriesToogle || editDescriptionToggle;
+   }
+
+   function setAllEditingFieldsOff() {
+      setEditTitleToogle(false);
+      setEditExMessageToogle(false);
+      setEditCategoriesToogle(false);
+      setEditDescriptionToggle(false);
+   }
+
    return (
       <div className={styles.container}>
          <Navbar />
@@ -187,7 +198,7 @@ export default function NotePage() {
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
                <div className="col-8">
-                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                  {editing() 
                      ? EditingButtonsBlock()
                      : null
                   }
@@ -206,11 +217,9 @@ export default function NotePage() {
                            onDoubleClick={handleEditDescriptionToggle}>{description}</h4>
                   }
 
-                  {/* Exception message */}
-                  {editExMessageToogle == true
-                     ? EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)
-                     : <h4 className="fw-light" style={{cursor: "pointer"}}
-                           onDoubleClick={handleEditExMessageToogle}>{exMessage}</h4>
+                  {exMessage
+                     ? <ExceptionMsgAccordion message={exMessage} />
+                     : null
                   }
 
                   {/* Categorias */}
@@ -227,7 +236,7 @@ export default function NotePage() {
                      })
                   }
 
-                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                  {editing()
                      ? <hr />
                      : null
                   }
