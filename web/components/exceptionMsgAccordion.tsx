@@ -5,6 +5,25 @@ type Props = {
    message: string
 }
 
+const valuable = [
+   "MongoDB.Bson.BsonSerializationException: No matching creator found.",
+   "ChooseBestCreator(Dictionary`2 values)",
+   "DeserializeClass(BsonDeserializationContext context)",
+   "ExecuteAsync(RetryableReadContext context, CancellationToken cancellationToken)",
+   "RepositoryBase`1.GetByIdAsync(Guid id, CancellationToken cancellationToken) in /Users/pedrodias/dev/mapvault/api/src/Repositories/RepositoryBase.cs:line 21",
+]
+
+function highlightValuable(content: string) {
+   var parse = require('html-react-parser')
+
+   for (let index = 0; index < valuable.length; index++) {
+      const element = valuable[index];
+      content = content.replace(element, `<strong style="background-color:#FFFF54" class="shadow-sm">${element}</strong>`);
+   }
+   
+   return parse(content)
+}
+
 const ExceptionMsgAccordion: React.FC<Props> = ({ label, message }) => {
    return (
       <div className="accordion accordion-flush" id="accordionExample">
@@ -22,7 +41,7 @@ const ExceptionMsgAccordion: React.FC<Props> = ({ label, message }) => {
                <pre className={`accordion-body fw-light ${styles.codeblock}`}
                   style={{whiteSpace: 'pre-line'}}>
                   <code>
-                     {message}
+                     {highlightValuable(message)}
                   </code>
                </pre>
             </div>
