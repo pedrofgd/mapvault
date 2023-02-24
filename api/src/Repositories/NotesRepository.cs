@@ -26,6 +26,7 @@ public class NotesRepository : RepositoryBase<Note>, INotesRepository
          .Include(doc => doc.Id)
          .Include(doc => doc.Title)
          .Include(doc => doc.Categories)
+         .Include(doc => doc.Description)
          .Include(doc => doc.ExceptionMessage);
 
       try

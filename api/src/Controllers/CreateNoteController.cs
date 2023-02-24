@@ -29,8 +29,9 @@ public class CreateNoteController : ControllerBase
    {
       var note = new Note(
          request.Title, 
-         request.Categories, 
-         request.ExceptionMessage, 
+         request.Categories,
+         request.Description,
+         request.ExceptionMessage,
          request.Content);
       
       var createResult = await _notesRepository.SaveOrUpdateAsync(note, cancellationToken);

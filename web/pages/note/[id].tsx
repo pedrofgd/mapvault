@@ -10,6 +10,7 @@ import { useEditor } from "../../contexts/editor"
 import { FiX } from 'react-icons/fi'
 import Modal from "../../components/modal"
 import { FormatDateTimeToString } from "../../utils/dataFormater"
+import ExceptionMsgAccordion from "../../components/exceptionMsgAccordion"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -21,6 +22,8 @@ export default function NotePage() {
 
    const [editTitleToogle, setEditTitleToogle] = useState(false)
    const [title, setTitle] = useState('')
+   const [editDescriptionToggle, setEditDescriptionToggle] = useState(false)
+   const [description, setDescription] = useState('')
    const [editExMessageToogle, setEditExMessageToogle] = useState(false)
    const [exMessage, setExMessage] = useState('')
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
@@ -33,6 +36,7 @@ export default function NotePage() {
       if (data) {
          setContent(data.content)
          setTitle(data.title)
+         setDescription(data.description)
          setExMessage(data.exceptionMessage)
          setCategories(data.categories.join(', '))
       }
@@ -53,6 +57,7 @@ export default function NotePage() {
       var body = JSON.stringify({
          id: data?.id,
          title: title,
+         description: description,
          categories: categoriesArray,
          exceptionMessage: exMessage,
          content: content
@@ -109,6 +114,10 @@ export default function NotePage() {
       setEditTitleToogle(!editTitleToogle)
    }
 
+   function handleEditDescriptionToggle() {
+      setEditDescriptionToggle(!editDescriptionToggle)
+   }
+
    function handleEditExMessageToogle() {
       setEditExMessageToogle(!editExMessageToogle)
    }
@@ -146,15 +155,12 @@ export default function NotePage() {
                <button type="button" className="me-2 btn btn-outline-secondary btn-sm"
                   onClick={() => {
                      setEditTitleToogle(false);
-                     setEditExMessageToogle(false);
-                     setEditCategoriesToogle(false);
+                     setAllEditingFieldsOff();
                   }}>Cancelar tudo</button>
                <button type="button" className="btn btn-success btn-sm"
                   onClick={() => {
                      handleUpdateNote();
-                     setEditTitleToogle(false);
-                     setEditExMessageToogle(false);
-                     setEditCategoriesToogle(false);
+                     setAllEditingFieldsOff();
                   }}>Salvar tudo</button>
             </div>
          </div>
@@ -173,6 +179,18 @@ export default function NotePage() {
       }
    }
 
+   function editing() {
+      return editTitleToogle || editExMessageToogle || 
+         editCategoriesToogle || editDescriptionToggle;
+   }
+
+   function setAllEditingFieldsOff() {
+      setEditTitleToogle(false);
+      setEditExMessageToogle(false);
+      setEditCategoriesToogle(false);
+      setEditDescriptionToggle(false);
+   }
+
    return (
       <div className={styles.container}>
          <Navbar />
@@ -180,7 +198,7 @@ export default function NotePage() {
          <main className="container-lg my-5" style={{minHeight: "70vh"}}>
             <div className="row">
                <div className="col-8">
-                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                  {editing() 
                      ? EditingButtonsBlock()
                      : null
                   }
@@ -192,11 +210,24 @@ export default function NotePage() {
                            onDoubleClick={handleEditTitleToogle}>{title}</h1>
                   }
 
+                  {/* Description */}
+                  {editDescriptionToggle == true
+                     ? EditTextInput('Editando Description', description, handleEditDescriptionToggle, setDescription)
+                     : <h4 className="fw-light" style={{cursor: "pointer"}}
+                           onDoubleClick={handleEditDescriptionToggle}>{description}</h4>
+                  }
+
                   {/* Exception message */}
                   {editExMessageToogle == true
                      ? EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)
-                     : <h4 className="fw-light" style={{cursor: "pointer"}}
-                           onDoubleClick={handleEditExMessageToogle}>{exMessage}</h4>
+                     : null
+                  }
+
+                  {exMessage
+                     ? <ExceptionMsgAccordion 
+                        label={editExMessageToogle ? 'Preview exception message' : 'Exception Message'}
+                        message={exMessage} />
+                     : null
                   }
 
                   {/* Categorias */}
@@ -213,7 +244,7 @@ export default function NotePage() {
                      })
                   }
 
-                  {editTitleToogle || editExMessageToogle || editCategoriesToogle
+                  {editing()
                      ? <hr />
                      : null
                   }
@@ -279,8 +310,30 @@ export default function NotePage() {
                </div>
 
                {/* Coluna direita */}
-               <div className="col ms-3 mt-2">
-                  
+               <div className="col ms-3 mt-2 d-flex flex-column align-items-start">
+                  {!description && !editDescriptionToggle
+                     ? <button className="btn btn-link text-primary-emphasis"
+                           onClick={() => {
+                              setEditDescriptionToggle(true)
+                           }}>
+                        Add description
+                     </button>
+                     : null}
+
+                  {!exMessage && !editExMessageToogle
+                     ? <button className="btn btn-link text-primary-emphasis"
+                           onClick={() => {
+                              setEditExMessageToogle(true)
+                           }}>
+                        Add an exception message
+                     </button>
+                     : <button className="btn btn-link text-secondary-emphasis"
+                        onClick={() => {
+                           setEditExMessageToogle(true)
+                        }}>
+                        Edit exception message
+                     </button>}
+
                </div>
             </div>
          </main>
