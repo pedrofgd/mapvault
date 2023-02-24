@@ -217,8 +217,16 @@ export default function NotePage() {
                            onDoubleClick={handleEditDescriptionToggle}>{description}</h4>
                   }
 
+                  {/* Exception message */}
+                  {editExMessageToogle == true
+                     ? EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)
+                     : null
+                  }
+
                   {exMessage
-                     ? <ExceptionMsgAccordion message={exMessage} />
+                     ? <ExceptionMsgAccordion 
+                        label={editExMessageToogle ? 'Preview exception message' : 'Exception Message'}
+                        message={exMessage} />
                      : null
                   }
 
@@ -302,8 +310,30 @@ export default function NotePage() {
                </div>
 
                {/* Coluna direita */}
-               <div className="col ms-3 mt-2">
-                  
+               <div className="col ms-3 mt-2 d-flex flex-column align-items-start">
+                  {!description && !editDescriptionToggle
+                     ? <button className="btn btn-link text-primary-emphasis"
+                           onClick={() => {
+                              setEditDescriptionToggle(true)
+                           }}>
+                        Add description
+                     </button>
+                     : null}
+
+                  {!exMessage && !editExMessageToogle
+                     ? <button className="btn btn-link text-primary-emphasis"
+                           onClick={() => {
+                              setEditExMessageToogle(true)
+                           }}>
+                        Add an exception message
+                     </button>
+                     : <button className="btn btn-link text-secondary-emphasis"
+                        onClick={() => {
+                           setEditExMessageToogle(true)
+                        }}>
+                        Edit exception message
+                     </button>}
+
                </div>
             </div>
          </main>

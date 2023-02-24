@@ -1,10 +1,11 @@
 import styles from '../styles/CodeBlock.module.css'
 
 type Props = {
+   label: string
    message: string
 }
 
-const ExceptionMsgAccordion: React.FC<Props> = ({ message }) => {
+const ExceptionMsgAccordion: React.FC<Props> = ({ label, message }) => {
    return (
       <div className="accordion accordion-flush" id="accordionExample">
          <div className="accordion-item">
@@ -13,7 +14,7 @@ const ExceptionMsgAccordion: React.FC<Props> = ({ message }) => {
                <button className="accordion-button fs-5 fw-light px-0" type="button" data-bs-toggle="collapse" 
                   data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
                   style={{backgroundColor: '#FFF', color: '#000', boxShadow: 'none'}}>
-                  Exception message
+                  {label}
                </button>
             </h2>
 
