@@ -13,6 +13,11 @@ export type Note = {
    modifiedAt: Date | null,
    categories: string[],
    description: string,
-   exceptionMessage: string,
+   exceptionMessage: ExceptionMessage,
    content: string
+}
+
+type ExceptionMessage = {
+   message: string,
+   valuables: string[]
 }

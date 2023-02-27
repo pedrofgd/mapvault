@@ -37,7 +37,7 @@ export default function NotePage() {
          setContent(data.content)
          setTitle(data.title)
          setDescription(data.description)
-         setExMessage(data.exceptionMessage)
+         setExMessage(data.exceptionMessage.message)
          setCategories(data.categories.join(', '))
       }
    }, [data])
