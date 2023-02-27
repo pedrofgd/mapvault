@@ -10,6 +10,7 @@ if (!builder.Environment.IsDevelopment())
 // Add services to the container.
 builder.Services.AddPersistenceExtensions(configuration);
 builder.Services.AddDataContextExtensions();
+builder.Services.AddExternalApis();
 
 builder.Services.AddControllers();
 
