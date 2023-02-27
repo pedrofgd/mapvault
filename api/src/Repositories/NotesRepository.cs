@@ -22,18 +22,21 @@ public class NotesRepository : RepositoryBase<Note>, INotesRepository
 
    public async Task<List<SummaryNoteQueryDto>?> GetAllSummaryNotes(CancellationToken cancellationToken)
    {
-      var projectionDefinition = Builders<Note>.Projection
-         .Include(doc => doc.Id)
-         .Include(doc => doc.Title)
-         .Include(doc => doc.Categories)
-         .Include(doc => doc.Description)
-         .Include(doc => doc.ExceptionMessage);
-
+      var customProjection = Builders<Note>.Projection.Expression(u =>
+         new SummaryNoteQueryDto
+         {
+            Id = u.Id,
+            Title = u.Title,
+            Categories = u.Categories,
+            Description = u.Description,
+            ExceptionMessage = u.ExceptionMessage.Message
+         });
+      
       try
       {
          return await Collection
             .Find(new BsonDocument())
-            .Project<SummaryNoteQueryDto>(projectionDefinition)
+            .Project(customProjection)
             .ToListAsync(cancellationToken: cancellationToken);
       }
       catch (Exception e)

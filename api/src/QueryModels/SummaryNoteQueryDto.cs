@@ -1,3 +1,5 @@
+using MapVault.Models;
+
 namespace MapVault.QueryModels;
 
 public class SummaryNoteQueryDto
