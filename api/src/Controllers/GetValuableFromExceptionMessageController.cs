@@ -6,22 +6,28 @@ namespace MapVault.Controllers;
 
 [ApiController]
 [Route("api/v1")]
-public class HighlightMessageController : ControllerBase
+public class GetValuableFromExceptionMessageController : ControllerBase
 {
+    private readonly ILogger<GetValuableFromExceptionMessageController> _logger;
     private readonly IHighlightMessageClient _highlightMessageClient;
 
-    public HighlightMessageController(
+    public GetValuableFromExceptionMessageController(
+        ILogger<GetValuableFromExceptionMessageController> logger,
         IHighlightMessageClient highlightMessageClient)
     {
+        _logger = logger;
         _highlightMessageClient = highlightMessageClient;
+        
+        _logger.LogInformation("GetValuableFromExceptionMessage has been started");
     }
     
     [HttpPost]
     [Route("highlight")]
-    public async Task<IActionResult> HighlightMessage([FromBody] HighlightMessageRequestDto request)
+    public async Task<IActionResult> GetValuableFromMessage([FromBody] HighlightMessageRequestDto request)
     {
         var valuables = await _highlightMessageClient.GetValuableFragments(request.Message);
         
+        _logger.LogInformation("GetValuableFromMessage run successfully");
         return Ok(new HighlightMessageResponseDto { ValuableFragments = valuables });
     }
 }
