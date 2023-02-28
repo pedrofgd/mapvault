@@ -3,7 +3,7 @@ import styles from '../styles/CodeBlock.module.css'
 type Props = {
    label: string
    message: string,
-   valuable: string[]
+   valuables: string[]
 }
 
 function highlightValuable(content: string, valuables: string[]) {
