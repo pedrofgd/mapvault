@@ -12,4 +12,7 @@ public class ExceptionMessage
 
     public void RegisterValuableFragments(IEnumerable<string> valuable) =>
         Valuables = valuable;
+
+    public void ResetValuableFragments() =>
+        Valuables = null;
 }

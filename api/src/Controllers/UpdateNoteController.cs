@@ -55,6 +55,10 @@ public class UpdateNoteController : ControllerBase
          _highlightExceptionMessage.Highlight(note.Id, note.ExceptionMessage.Message);
 #pragma warning restore CS4014
       }
+      else
+      {
+         note.ResetExceptionMessageHighlights();
+      }
       
       return Ok(note);
    }

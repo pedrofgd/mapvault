@@ -38,4 +38,9 @@ public class Note : Entity
    {
       ExceptionMessage.RegisterValuableFragments(valuable);
    }
+
+   public void ResetExceptionMessageHighlights()
+   {
+      ExceptionMessage.ResetValuableFragments();
+   }
 }
