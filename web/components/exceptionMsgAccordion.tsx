@@ -7,8 +7,10 @@ type Props = {
 }
 
 function highlightValuable(content: string, valuables: string[]) {
-   var parse = require('html-react-parser')
+   if (valuables === null) return content
 
+   var parse = require('html-react-parser')
+   
    for (let index = 0; index < valuables.length; index++) {
       const element = valuables[index];
       content = content.replace(element, `<strong style="background-color:#FFFF54" class="shadow-sm">${element}</strong>`);
