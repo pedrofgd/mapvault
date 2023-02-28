@@ -26,6 +26,7 @@ export default function NotePage() {
    const [description, setDescription] = useState('')
    const [editExMessageToogle, setEditExMessageToogle] = useState(false)
    const [exMessage, setExMessage] = useState('')
+   const [exMessageValuables, setExMessageValuables] = useState([''])
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
    const [categories, setCategories] = useState('')
    const [categoriesArray, setCategoriesArray] = useState([''])
@@ -38,6 +39,7 @@ export default function NotePage() {
          setTitle(data.title)
          setDescription(data.description)
          setExMessage(data.exceptionMessage.message)
+         setExMessageValuables(data.exceptionMessage.valuables)
          setCategories(data.categories.join(', '))
       }
    }, [data])
@@ -226,7 +228,8 @@ export default function NotePage() {
                   {exMessage
                      ? <ExceptionMsgAccordion 
                         label={editExMessageToogle ? 'Preview exception message' : 'Exception Message'}
-                        message={exMessage} />
+                        message={exMessage}
+                        valuables={exMessageValuables} />
                      : null
                   }
 
