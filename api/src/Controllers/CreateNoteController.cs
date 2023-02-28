@@ -1,6 +1,7 @@
 using MapVault.Dtos;
 using MapVault.Models;
 using MapVault.Repositories;
+using MapVault.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -12,13 +13,16 @@ public class CreateNoteController : ControllerBase
 {
    private readonly ILogger<CreateNoteController> _logger;
    private readonly INotesRepository _notesRepository;
+   private readonly HighlightExceptionMessage _highlightExceptionMessage;
 
    public CreateNoteController(
       ILogger<CreateNoteController> logger,
-      INotesRepository notesRepository)
+      INotesRepository notesRepository,
+      HighlightExceptionMessage highlightExceptionMessage)
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _notesRepository = notesRepository ?? throw new ArgumentNullException(nameof(notesRepository));
+      _highlightExceptionMessage = highlightExceptionMessage;
 
       _logger.LogInformation("CreateNoteController has been started");
    }
@@ -42,6 +46,15 @@ public class CreateNoteController : ControllerBase
       }
 
       _logger.LogInformation("CreateNote run successfully for id {Id}", note.Id);
+
+      if (request.HighlightMessage && note.ExceptionMessage.Message != null)
+      {
+#pragma warning disable CS4014
+         // Fire-and-forget
+         _highlightExceptionMessage.Highlight(note.Id, note.ExceptionMessage.Message);
+#pragma warning restore CS4014
+      }
+
       return Ok(note);
    }
 }

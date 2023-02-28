@@ -11,6 +11,7 @@ if (!builder.Environment.IsDevelopment())
 builder.Services.AddPersistenceExtensions(configuration);
 builder.Services.AddDataContextExtensions();
 builder.Services.AddExternalApis();
+builder.Services.AddUtils();
 
 builder.Services.AddControllers();
 

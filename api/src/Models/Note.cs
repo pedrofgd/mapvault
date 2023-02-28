@@ -33,4 +33,9 @@ public class Note : Entity
       ExceptionMessage = new ExceptionMessage(exceptionMessage);
       Content = content;
    }
+
+   public void HighlightExceptionMessage(IEnumerable<string> valuable)
+   {
+      ExceptionMessage.RegisterValuableFragments(valuable);
+   }
 }
