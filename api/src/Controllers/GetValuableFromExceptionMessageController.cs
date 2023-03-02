@@ -21,7 +21,7 @@ public class GetValuableFromExceptionMessageController : ControllerBase
         _logger.LogInformation("GetValuableFromExceptionMessageController has been started");
     }
     
-    [HttpPost]
+    [HttpGet]
     [Route("highlight")]
     public async Task<IActionResult> GetValuableFromMessage([FromBody] HighlightMessageRequestDto request)
     {
