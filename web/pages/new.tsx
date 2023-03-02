@@ -108,11 +108,10 @@ export default function New() {
                               <input className="form-check-input" type="checkbox"
                                  onClick={() => {
                                     setHighlightMessage(!highlightMessage)
-                                    console.log(highlightMessage)
                                  }} />
                               <label className="form-check-label ps-1" style={{fontSize: '14px'}}>
                                  Highlight valuable fragments from exception message
-                           </label>
+                              </label>
                            </div>
                         </div>
 

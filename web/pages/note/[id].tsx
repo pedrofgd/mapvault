@@ -26,7 +26,8 @@ export default function NotePage() {
    const [description, setDescription] = useState('')
    const [editExMessageToogle, setEditExMessageToogle] = useState(false)
    const [exMessage, setExMessage] = useState('')
-   const [exMessageValuables, setExMessageValuables] = useState([''])
+   const [exMessageValuables, setExMessageValuables] = useState<string[]>([])
+   const [highlightMessageOption, setHighlightMessageOption] = useState(false)
    const [editCategoriesToogle, setEditCategoriesToogle] = useState(false)
    const [categories, setCategories] = useState('')
    const [categoriesArray, setCategoriesArray] = useState([''])
@@ -40,6 +41,7 @@ export default function NotePage() {
          setDescription(data.description)
          setExMessage(data.exceptionMessage.message)
          setExMessageValuables(data.exceptionMessage.valuables)
+         setHighlightMessageOption(data.exceptionMessage?.valuables?.length > 0)
          setCategories(data.categories.join(', '))
       }
    }, [data])
@@ -62,6 +64,7 @@ export default function NotePage() {
          description: description,
          categories: categoriesArray,
          exceptionMessage: exMessage,
+         highlightMessage: highlightMessageOption,
          content: content
       })
       
@@ -221,7 +224,22 @@ export default function NotePage() {
 
                   {/* Exception message */}
                   {editExMessageToogle == true
-                     ? EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)
+                     ? (
+                        <>
+                           {EditTextInput('Editando Exception Message', exMessage, handleEditExMessageToogle, setExMessage)}
+                           <div className="form-check d-flex">
+                              <input className="form-check-input" type="checkbox" 
+                                 checked={highlightMessageOption}
+                                 onChange={() => {
+                                    setHighlightMessageOption(!highlightMessageOption)
+                                 }} 
+                              />
+                              <label className="form-check-label ps-1" style={{fontSize: '14px'}}>
+                                 Highlight valuable fragments from exception message
+                              </label>
+                           </div>
+                        </>
+                     )
                      : null
                   }
 
@@ -326,13 +344,13 @@ export default function NotePage() {
                   {!exMessage && !editExMessageToogle
                      ? <button className="btn btn-link text-primary-emphasis"
                            onClick={() => {
-                              setEditExMessageToogle(true)
+                              setEditExMessageToogle(!editExMessageToogle)
                            }}>
                         Add an exception message
                      </button>
                      : <button className="btn btn-link text-secondary-emphasis"
                         onClick={() => {
-                           setEditExMessageToogle(true)
+                           setEditExMessageToogle(!editExMessageToogle)
                         }}>
                         Edit exception message
                      </button>}
