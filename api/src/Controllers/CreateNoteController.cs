@@ -3,7 +3,6 @@ using MapVault.Models;
 using MapVault.Repositories;
 using MapVault.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace MapVault.Controllers;
 
@@ -22,7 +21,7 @@ public class CreateNoteController : ControllerBase
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _notesRepository = notesRepository ?? throw new ArgumentNullException(nameof(notesRepository));
-      _highlightExceptionMessage = highlightExceptionMessage;
+      _highlightExceptionMessage = highlightExceptionMessage ?? throw new ArgumentNullException(nameof(highlightExceptionMessage));
 
       _logger.LogInformation("CreateNoteController has been started");
    }

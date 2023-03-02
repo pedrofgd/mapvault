@@ -29,7 +29,7 @@ public class DeleteNoteController : ControllerBase
       if (deleteResult is false)
       {
          _logger.LogError("Couldn't delete note for id {Id}", id);
-         return BadRequest(new DefaultErrorResponse($"Couldn't delete note. The informed Id may not exists"));
+         return BadRequest(new DefaultErrorResponse("Couldn't delete note. The informed Id may not exists"));
       }
       
       _logger.LogInformation("DeleteNote run successfully for id {Id}", id);

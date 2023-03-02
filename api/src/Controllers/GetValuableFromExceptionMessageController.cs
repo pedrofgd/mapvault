@@ -15,10 +15,10 @@ public class GetValuableFromExceptionMessageController : ControllerBase
         ILogger<GetValuableFromExceptionMessageController> logger,
         IHighlightMessageClient highlightMessageClient)
     {
-        _logger = logger;
-        _highlightMessageClient = highlightMessageClient;
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        _highlightMessageClient = highlightMessageClient ?? throw new ArgumentNullException(nameof(highlightMessageClient));
         
-        _logger.LogInformation("GetValuableFromExceptionMessage has been started");
+        _logger.LogInformation("GetValuableFromExceptionMessageController has been started");
     }
     
     [HttpPost]

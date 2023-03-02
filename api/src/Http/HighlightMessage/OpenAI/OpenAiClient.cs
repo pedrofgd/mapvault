@@ -15,7 +15,7 @@ public class OpenAiClient : IHighlightMessageClient
     };
 
     private const string PromptTemplate =
-        "select 3 most important fragments in order to understand the following exception message" +
+        "select 3 most important fragments in order to understand the following exception message " +
         "and return as plain text, separated by ';' and with no additional comments:";
 
     private readonly OpenAiSettings _settings;
@@ -58,10 +58,11 @@ public class OpenAiClient : IHighlightMessageClient
         var response = await httpClient.SendAsync(request);
         if (!response.IsSuccessStatusCode)
         {
-         _logger.LogWarning(
-             "OpenAi returned {StatusCode} while getting valuable fragments from message. " +
-             "ErrorMessage: {Message}",
-             (int)response.StatusCode, JsonConvert.SerializeObject(response.Content.ReadAsStringAsync()));   
+             _logger.LogWarning(
+                 "OpenAi returned {StatusCode} while getting valuable fragments from message. " +
+                 "ErrorMessage: {Message}",
+                 (int)response.StatusCode, JsonConvert.SerializeObject(response.Content.ReadAsStringAsync()));
+             return Array.Empty<string>();
         }
         
         var responseContent = await response.Content.ReadAsStringAsync();

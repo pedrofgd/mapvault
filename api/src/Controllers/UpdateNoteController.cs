@@ -20,7 +20,7 @@ public class UpdateNoteController : ControllerBase
    {
       _logger = logger ?? throw new ArgumentNullException(nameof(logger));
       _notesRepository = repository ?? throw new ArgumentNullException(nameof(repository));
-      _highlightExceptionMessage = highlightExceptionMessage;
+      _highlightExceptionMessage = highlightExceptionMessage ?? throw new ArgumentNullException(nameof(highlightExceptionMessage));
 
       _logger.LogInformation("UpdateNoteController has been started");
    }

@@ -1,4 +1,3 @@
-using MapVault.Data;
 using MapVault.Repositories;
 
 namespace MapVault.DependencyInjections;

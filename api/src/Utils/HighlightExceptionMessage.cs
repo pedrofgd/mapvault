@@ -53,6 +53,7 @@ public class HighlightExceptionMessage
                 "An error occurred while trying to highlight exception message for note {NoteId} " +
                 "Erro: {Message}",
                 noteId, e.Message);
+            return;
         }
 
         watch.Stop();

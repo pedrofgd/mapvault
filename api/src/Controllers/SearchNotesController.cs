@@ -16,6 +16,8 @@ public class SearchController : ControllerBase
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _notesRepository = repository ?? throw new ArgumentNullException(nameof(repository));
+        
+        _logger.LogInformation("SearchController has been started");
     }
     
     [HttpGet]

@@ -1,5 +1,4 @@
 using MapVault.Dtos;
-using MapVault.QueryModels;
 using MapVault.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,3 +1,5 @@
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
 namespace MapVault.Http.HighlightMessage.OpenAI;
 
 public class OpenAiTextCompletionResponseDto

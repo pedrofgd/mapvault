@@ -235,7 +235,7 @@ export default function NotePage() {
                                  }} 
                               />
                               <label className="form-check-label ps-1" style={{fontSize: '14px'}}>
-                                 Highlight valuable fragments from exception message
+                                 Destacar trechos importantes da mensagem
                               </label>
                            </div>
                         </>
