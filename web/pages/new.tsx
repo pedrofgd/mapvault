@@ -16,6 +16,7 @@ export default function New() {
    const [categories, setCategories] = useState('')
    const [description, setDescription] = useState('')
    const [exceptionMessage, setExceptionMessage] = useState('')
+   const [highlightMessage, setHighlightMessage] = useState(false)
    const { content, setContent } = useEditor()
 
    useEffect(() => {
@@ -32,6 +33,7 @@ export default function New() {
          categories: categoriesArray,
          description,
          exceptionMessage,
+         highlightMessage,
          content
       })
 
@@ -101,6 +103,16 @@ export default function New() {
                               type="text" className="form-control" id="floatingInput"
                               onChange={(e) => setExceptionMessage(e.target.value)} />
                            <label htmlFor="floatingInput">Exception message (opcional)</label>
+
+                           <div className="form-check pt-3 d-flex">
+                              <input className="form-check-input" type="checkbox"
+                                 onClick={() => {
+                                    setHighlightMessage(!highlightMessage)
+                                 }} />
+                              <label className="form-check-label ps-1" style={{fontSize: '14px'}}>
+                                 Destacar trechos importantes da mensagem
+                              </label>
+                           </div>
                         </div>
 
                         <Editor />

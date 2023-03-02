@@ -2,10 +2,24 @@ import styles from '../styles/CodeBlock.module.css'
 
 type Props = {
    label: string
-   message: string
+   message: string,
+   valuables: string[]
 }
 
-const ExceptionMsgAccordion: React.FC<Props> = ({ label, message }) => {
+function highlightValuable(content: string, valuables: string[]) {
+   if (valuables === null) return content
+
+   var parse = require('html-react-parser')
+   
+   for (let index = 0; index < valuables.length; index++) {
+      const element = valuables[index];
+      content = content.replace(element, `<strong style="background-color:#FFFF54" class="shadow-sm">${element}</strong>`);
+   }
+   
+   return parse(content)
+}
+
+const ExceptionMsgAccordion: React.FC<Props> = ({ label, message, valuables }) => {
    return (
       <div className="accordion accordion-flush" id="accordionExample">
          <div className="accordion-item">
@@ -22,7 +36,7 @@ const ExceptionMsgAccordion: React.FC<Props> = ({ label, message }) => {
                <pre className={`accordion-body fw-light ${styles.codeblock}`}
                   style={{whiteSpace: 'pre-line'}}>
                   <code>
-                     {message}
+                     {highlightValuable(message, valuables)}
                   </code>
                </pre>
             </div>
