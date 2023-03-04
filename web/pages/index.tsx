@@ -10,10 +10,15 @@ import { useEffect } from 'react'
 import CardsView from '../components/notesViews/cardsView'
 import { useView } from '../contexts/view'
 import ListView from '../components/notesViews/listView'
+import { cookies } from 'next/headers';
+import {useCookies} from 'react-cookie'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export default function Home() {
+  const [ cookies, setCookies ] = useCookies(['token'])
+  console.log(cookies)
+
   const { data, error } = useSwr<NoteResume[]>('/api/notes', fetcher)
   const { summaryNotes, setSummaryNotes } = useNote()
   const { view } = useView()

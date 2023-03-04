@@ -38,6 +38,10 @@ export default function Navbar() {
 
             <div className="col d-flex align-items-center">
                {IsDevelopment() ? <Testing /> : null}
+               
+               <Link href={`${process.env.NEXT_PUBLIC_BACKEND_BASE_URL as string}/api/login`}>
+                  Login
+               </Link>
             </div>
             
          </div>

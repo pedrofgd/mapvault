@@ -1,3 +1,6 @@
+// Workaround for error validating SSL locally
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next";
 
