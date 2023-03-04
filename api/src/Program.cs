@@ -12,6 +12,7 @@ builder.Services.AddPersistenceExtensions(configuration);
 builder.Services.AddDataContextExtensions();
 builder.Services.AddExternalApis();
 builder.Services.AddUtils();
+builder.Services.AddAuth(configuration);
 
 builder.Services.AddControllers();
 
@@ -29,6 +30,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
