@@ -49,7 +49,7 @@ public class AuthenticationController : Controller
 
         var claims = User.Claims.Select(x => new { x.Type, x.Value });
 
-        return Ok(accessToken);
+        return Ok(new { Provider = User.Identity?.AuthenticationType, accessToken, claims });
     }
 
     [HttpGet("logout")]

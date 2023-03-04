@@ -18,7 +18,6 @@ public static class AuthExtensions
             })
             .AddCookie("Cookies", options =>
             {
-                options.LoginPath = "api/login";
                 options.SlidingExpiration = true; // todo: not working
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 
