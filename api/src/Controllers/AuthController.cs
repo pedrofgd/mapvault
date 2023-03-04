@@ -89,8 +89,18 @@ public class AuthenticationController : Controller
         );
 
         var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
+        
+        // Set cookie containing JWT token
+        var options = new CookieOptions
+        {
+            HttpOnly = false, // todo
+            Secure = false, // Set this to true if your frontend app is served over HTTPS todo
+            SameSite = SameSiteMode.Strict // Set this to a suitable SameSite mode for your app
+        };
+        Response.Cookies.Append("token", encodedToken, options);
 
-        return Ok(new { Provider = User.Identity?.AuthenticationType, accessToken, claims, encodedToken });
+        // Redirect back to frontend app
+        return Redirect("http://localhost:3000");
     }
 
     [HttpGet("logout")]
