@@ -1,6 +1,7 @@
 using System.Net;
 using MapVault.Dtos;
 using MapVault.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MapVault.Controllers;
@@ -22,6 +23,7 @@ public class CountNotesController : ControllerBase
       _logger.LogInformation("CountNotesController has been started");
    }
 
+   [Authorize]
    [HttpGet]
    [Route("notes/count")]
    [ProducesResponseType(typeof(CountNotesResponseDto), (int)HttpStatusCode.OK)]
