@@ -8,4 +8,6 @@ public class Entity
         get => _id;
         protected init => _id = value == Guid.Empty ? Guid.NewGuid() : value;
     }
+    
+    public DateTime ModifiedAt { get; set; }
 }

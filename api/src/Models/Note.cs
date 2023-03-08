@@ -3,7 +3,6 @@ namespace MapVault.Models;
 public class Note : Entity
 {
    public DateTime? CreatedAt { get; private set; }
-   public DateTime? ModifiedAt { get; private set; }
    public string? Title { get; private set; }
    public string[]? Categories { get; private set; }
    public string? Description { get; private set; }
@@ -15,7 +14,6 @@ public class Note : Entity
    {
       Id = id;
       CreatedAt = DateTime.UtcNow;
-      ModifiedAt = DateTime.UtcNow;
       Title = title;
       Categories = categories;
       Description = description;
@@ -26,7 +24,6 @@ public class Note : Entity
    public void Update(string? title, string[]? categories, 
       string? description, string? exceptionMessage, string? content)
    {
-      ModifiedAt = DateTime.UtcNow;
       Title = title;
       Categories = categories;
       Description = description;

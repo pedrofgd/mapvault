@@ -25,6 +25,7 @@ public abstract class RepositoryBase<TEntity> where TEntity : Entity
 
     public async Task<bool> SaveOrUpdateAsync(TEntity entity, CancellationToken cancellationToken)
     {
+        entity.ModifiedAt = DateTime.UtcNow;
         var replaceOneResult = await Collection
             .ReplaceOneAsync(
                 doc => doc.Id == entity.Id,
