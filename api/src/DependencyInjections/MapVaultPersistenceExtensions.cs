@@ -10,6 +10,7 @@ public static class MapVaultPersistenceExtensions
         IConfiguration configuration)
     {
         NoteMap.Map.Fields();
+        UserMap.Map.Fields();
 
         var serviceProvider = services.BuildServiceProvider();
         var mongoDbClient = MongoDbConnectionFactory
