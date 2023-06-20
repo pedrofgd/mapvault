@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Text Highlighter v2",
+    "version": "1.0",
+    "description": "Highlight stuff",
+    "permissions": ["activeTab", "storage"], 
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": [
+                "contentScript.js"
+            ]
+        }
+    ],
+    "host_permissions": ["<all_urls>"]
+}
