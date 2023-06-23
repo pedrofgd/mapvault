@@ -10,6 +10,7 @@ import { useEffect } from 'react'
 import CardsView from '../components/notesViews/cardsView'
 import { useView } from '../contexts/view'
 import ListView from '../components/notesViews/listView'
+import Filter from '../components/filter'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -57,9 +58,13 @@ export default function Home() {
         </h1>
 
         {/* Botão de novo */}
-        <Link href="/new" className="d-grid gap-2 col-2 mx-auto my-4">
-          <button className="btn btn-outline-success btn-lg" type="button">Novo</button>
-        </Link>
+        <div className='d-grid gap-2 col-2'>
+          <Link href="/new" className='mx-auto my-4 mb-2'>
+            <button className="btn btn-outline-success btn-lg" type="button">Novo</button>
+          </Link>
+        </div>
+        
+        <Filter />
 
         { pickView(data) }
 
