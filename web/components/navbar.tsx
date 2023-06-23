@@ -38,6 +38,11 @@ export default function Navbar() {
 
             <div className="col d-flex align-items-center">
                {IsDevelopment() ? <Testing /> : null}
+
+               {/* Revisitar notas */}
+               <Link href="/new" className='mx-auto'>
+                  <button className="btn btn-outline-info" type="button">Revisitar</button>
+               </Link>
             </div>
             
          </div>
