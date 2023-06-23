@@ -162,6 +162,12 @@
   opacity: 0.7;
 }
 
+.filterBorder {
+  background-color: #F8F8F8;
+  border: 1px solid #D2D2D2;
+  border-radius: 5px;
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
