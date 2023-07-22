@@ -1,4 +1,5 @@
-import { store, load as loadAll } from './storage.js'
+import { store, load as load } from './storage.js'
+import { cmdline, displayCommand, processCommand } from './cmdline.js'
 
 const host = location.host;
 const pathname = location.pathname;
@@ -20,7 +21,7 @@ async function highlightAndStore() {
 async function applyExistingHighlights() {
     console.log('Loading highlights in this page');
     
-    const data = await loadAll(host, pathname);
+    const data = await load(host, pathname);
     console.log(data);
 
     let pageContent = document.body.innerHTML;
@@ -37,7 +38,51 @@ async function applyExistingHighlights() {
     document.body.innerHTML = pageContent;
 }
 
+const Mode = {
+    Highlight: "highlight",
+    Cmdline: "cmdline",
+};
+
 export async function init() {
-    document.addEventListener('keypress', highlightAndStore);
+    let mode = Mode.Highlight;
+
+    let command = '';
+    document.addEventListener('keydown', function(event) {
+        if (event.key === ":") {
+            const currIsCmdline = mode === Mode.Cmdline;
+            if (currIsCmdline) {
+                mode = Mode.Highlight;
+                command = '';
+            } else {
+                mode = Mode.Cmdline;
+            }
+            cmdline(!currIsCmdline);
+        } else {
+            if (mode === Mode.Highlight) {
+                highlightAndStore()
+            } else if (mode === Mode.Cmdline) {
+                if (event.key === "Backspace") {
+                    command = command.slice(0, -1);
+                } else if (event.key === " ") {
+                    event.preventDefault();
+                    command = command += " ";
+                } else if (event.key === "Enter") {
+                    var err = processCommand(command);
+                    if (err) {
+                        alert(err);
+                    } else {
+                        mode = Mode.Highlight;
+                        cmdline(false);
+                    }
+                } else { // TODO: ignore control keys (Meta, Shift, Control...)
+                    command += event.key;
+                }
+
+                console.log(command);
+                displayCommand(command);
+            }
+        }
+
+    });
     await applyExistingHighlights();
 }

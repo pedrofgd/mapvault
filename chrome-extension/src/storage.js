@@ -1,8 +1,8 @@
 export async function store(selection, host, pathname) {
     console.log("Storing highlights...");
+    console.log(selection);
 
     const { highlights } = await chrome.storage.local.get({ highlights: {} });
-    console.log("store highlights: ", highlights);
 
     const location = host + pathname;
     if (!highlights[location]) highlights[location] = [];
