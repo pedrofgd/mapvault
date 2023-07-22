@@ -1,9 +1,11 @@
+import { createNote } from "./api.js";
+
 const cmdlineId = "highlighter-cmdline";
 
-export function cmdline(display) {
+export function cmdlineToogle(display) {
 
     if (display) {
-        createCmdLine();
+        createCmdline();
     } else { // toggle cmdline view
         var cmdlineEl = document.getElementById(cmdlineId);
         if (cmdlineEl) cmdlineEl.remove();
@@ -11,7 +13,7 @@ export function cmdline(display) {
 
 }
 
-function createCmdLine() {
+function createCmdline() {
 
     var cmdlineEl = document.createElement("div");
 
@@ -22,7 +24,7 @@ function createCmdLine() {
         "width: 100%; " + 
         "background-color: black; color: white; " +
         "padding: 3px 0px 3px 3px; " +
-        "font-family: 'SF Mono'; font-size: 9px; " +
+        "font-family: 'Fira Code'; font-size: 9px; " +
         "z-index: 5432;");
     cmdlineEl.setAttribute("id", cmdlineId);
 
@@ -35,6 +37,25 @@ export function displayCommand(command) {
     cmdlineEl.innerHTML = ':' + command;
 }
 
-export function processCommand(command) {
-    // TODO: start with new command that receives an argument for name of a note    
+export async function processCommand(command, location) {
+    console.log("processing command...");
+
+    let i = 0;
+    let token = "";
+    while (i < command.length) {
+        if (token !== "" && command[i] === " ") 
+            break;
+
+        while (command[i] !== " ") {
+            token += command[i];
+            i++;
+        }
+    }
+    
+    if (token === "new") {
+        var nameArgument = command.slice(i+1, command.length);
+        await createNote(nameArgument, location);
+    } else {
+        return "Erro: comando não existe";
+    }
 }

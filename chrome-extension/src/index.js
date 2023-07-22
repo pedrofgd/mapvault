@@ -1,5 +1,5 @@
 import { store, load as load } from './storage.js'
-import { cmdline, displayCommand, processCommand } from './cmdline.js'
+import { cmdlineToogle, displayCommand, processCommand } from './cmdline.js'
 
 const host = location.host;
 const pathname = location.pathname;
@@ -46,8 +46,8 @@ const Mode = {
 export async function init() {
     let mode = Mode.Highlight;
 
-    let command = '';
-    document.addEventListener('keydown', function(event) {
+    let command = "";
+    document.addEventListener('keydown', async function(event) {
         if (event.key === ":") {
             const currIsCmdline = mode === Mode.Cmdline;
             if (currIsCmdline) {
@@ -56,7 +56,7 @@ export async function init() {
             } else {
                 mode = Mode.Cmdline;
             }
-            cmdline(!currIsCmdline);
+            cmdlineToogle(!currIsCmdline);
         } else {
             if (mode === Mode.Highlight) {
                 highlightAndStore()
@@ -67,18 +67,18 @@ export async function init() {
                     event.preventDefault();
                     command = command += " ";
                 } else if (event.key === "Enter") {
-                    var err = processCommand(command);
+                    var err = await processCommand(command, host + pathname);
                     if (err) {
                         alert(err);
                     } else {
                         mode = Mode.Highlight;
-                        cmdline(false);
+                        cmdlineToogle(false);
+                        command = '';
                     }
                 } else { // TODO: ignore control keys (Meta, Shift, Control...)
                     command += event.key;
                 }
 
-                console.log(command);
                 displayCommand(command);
             }
         }
