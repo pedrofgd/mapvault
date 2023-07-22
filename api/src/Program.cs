@@ -7,6 +7,16 @@ var configuration = builder.Configuration;
 if (!builder.Environment.IsDevelopment())
     configuration.AddSystemsManager("/mapvault");
 
+const string CORS_POLICY = "DefaultCors";
+// TODO: configure for production
+builder.Services.AddCors(opt => {
+    opt.AddPolicy(CORS_POLICY, policy => {
+            policy.AllowAnyOrigin();
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+    });
+});
+
 // Add services to the container.
 builder.Services.AddPersistenceExtensions(configuration);
 builder.Services.AddDataContextExtensions();
@@ -30,6 +40,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(CORS_POLICY);
 
 app.MapControllers();
 
