@@ -24,7 +24,7 @@ function createCmdline() {
         "width: 100%; " + 
         "background-color: black; color: white; " +
         "padding: 3px 0px 3px 3px; " +
-        "font-family: 'Fira Code'; font-size: 9px; " +
+        "font-family: 'Fira Code'; font-size: 12px; " +
         "z-index: 5432;");
     cmdlineEl.setAttribute("id", cmdlineId);
 
