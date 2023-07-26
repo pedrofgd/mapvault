@@ -15,6 +15,5 @@ export async function createNote(title, location) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-        referrerPolicy: "no-referrer"
     });
 }

@@ -59,8 +59,13 @@ async function handleCmdlineKeydown(event) {
 
     const key = event.key;
     switch (key) {
+        case "Meta":
+        case "Escape":
+            toogleMode();
+            break;
         case "Backspace":
-            if (command === "") toogleMode();
+            if (command === "") 
+                toogleMode();
             command = command.slice(0, -1);
             break;
         case " ":
@@ -68,22 +73,23 @@ async function handleCmdlineKeydown(event) {
             break;
         case "Enter":
             var err = await processCommand(command, host + pathname);
-            if (err) {
-                alert(err);
-            } else {
-                mode = Mode.Highlight;
-                cmdlineToogle(false);
-                command = '';
-            }
+            if (err) alert(err);
+            else toogleMode();
         // Ignored keys. TODO: review strategy
-        case "Meta":
+
         case "Shift":
         case "Control":
         case "CapsLock":
         case "Delete":
         case "Alt":
         case "Tab":
-        case "Escape":
+        case "ArrowUp":
+        case "ArrowDown":
+        case "ArrowLeft":
+        case "ArrowRight":
+        case "Dead":
+        case "PageUp":
+        case "PageDown":
             break;
         // Then, all other keys are the command input
         default:
@@ -91,8 +97,8 @@ async function handleCmdlineKeydown(event) {
             break;
     }
 
+    // If still in CMDLINE mode, display it
     if (mode === Mode.Cmdline)
-        // If still in CMDLINE mode, display it
         displayCommand(command);
 }
 

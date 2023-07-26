@@ -3,18 +3,15 @@ import { createNote } from "./api.js";
 const cmdlineId = "highlighter-cmdline";
 
 export function cmdlineToogle(display) {
-
     if (display) {
         createCmdline();
     } else { // toggle cmdline view
         var cmdlineEl = document.getElementById(cmdlineId);
         if (cmdlineEl) cmdlineEl.remove();
     }
-
 }
 
 function createCmdline() {
-
     var cmdlineEl = document.createElement("div");
 
     cmdlineEl.innerHTML = ":";
@@ -22,14 +19,14 @@ function createCmdline() {
         "position: fixed; " +
         "left: 0; bottom: 0; " +
         "width: 100%; " + 
-        "background-color: black; color: white; " +
+        "background-color: #3b3947; color: white; " +
         "padding: 3px 0px 3px 3px; " +
-        "font-family: 'Fira Code'; font-size: 12px; " +
+        "font-family: 'Fira Code'; font-size: 1rem; " +
         "z-index: 5432;");
     cmdlineEl.setAttribute("id", cmdlineId);
+    //TODO: blink cursor block (#F4B77D)
 
     document.body.appendChild(cmdlineEl);
-
 }
 
 export function displayCommand(command) {
@@ -38,8 +35,6 @@ export function displayCommand(command) {
 }
 
 export async function processCommand(command, location) {
-    console.log("processing command...");
-
     let i = 0;
     let token = "";
     while (i < command.length) {
