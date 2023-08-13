@@ -28,7 +28,9 @@ public class CreateNoteController : ControllerBase
 
    [HttpPost]
    [Route("notes/create")]
-   public async Task<IActionResult> CreateNote([FromBody] CreateNoteRequestDto request, CancellationToken cancellationToken)
+   public async Task<IActionResult> CreateNote(
+       [FromBody] CreateNoteRequestDto request, 
+       CancellationToken cancellationToken)
    {
       var note = new Note(
          request.Title, 

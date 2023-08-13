@@ -9,7 +9,8 @@ public class Note : Entity
    public string? Description { get; private set; }
    public ExceptionMessage ExceptionMessage { get; private set; }
    public string? Content { get; private set; }
-   
+   public ICollection<string> Remarks { get; private set; }
+
    public Note(string? title, string[]? categories, string? description, 
       string? exceptionMessage, string? content, Guid id = default)
    {
@@ -32,6 +33,7 @@ public class Note : Entity
       Description = description;
       ExceptionMessage = new ExceptionMessage(exceptionMessage);
       Content = content;
+      Remarks = new List<string>();
    }
 
    public void HighlightExceptionMessage(IEnumerable<string> valuable)
@@ -42,5 +44,13 @@ public class Note : Entity
    public void ResetExceptionMessageHighlights()
    {
       ExceptionMessage.ResetValuableFragments();
+   }
+
+   public void AddRemark(string remark)
+   {
+       // TODO: append remarks in a "Remark" session and with <li> tags
+       Remarks ??= new List<string>();
+       Remarks.Add($"<br>{remark}</br>");
+       Content += "\n" + remark;
    }
 }

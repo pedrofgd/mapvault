@@ -1,8 +1,8 @@
-import { store, load as load } from './storage.js'
+import { storeHighlight, load } from './storage.js'
 import { cmdlineToogle, displayCommand, processCommand } from './cmdline.js'
 
-const host = location.host;
-const pathname = location.pathname;
+export const host = location.host;
+export const pathname = location.pathname;
 
 const Mode = {
     Highlight: "highlight",
@@ -22,7 +22,7 @@ async function highlightAndStore() {
 
   selection.surroundContents(content);
 
-  await store(selection, host, pathname); 
+  await storeHighlight(selection, host, pathname); 
 }
 
 async function applyExistingHighlights() {
@@ -30,6 +30,9 @@ async function applyExistingHighlights() {
     
     const data = await load(host, pathname);
     console.log(data);
+
+    // TODO: fix apply highlights to page
+    return;
 
     let pageContent = document.body.innerHTML;
 
@@ -73,8 +76,11 @@ async function handleCmdlineKeydown(event) {
             break;
         case "Enter":
             var err = await processCommand(command, host + pathname);
-            if (err) alert(err);
-            else toogleMode();
+            if (err) {
+                alert(err);
+            } else {
+                toogleMode();
+            }
         // Ignored keys. TODO: review strategy
 
         case "Shift":
