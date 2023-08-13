@@ -50,4 +50,21 @@ public class GetNotesController : ControllerBase
       _logger.LogInformation("GetNoteById run successfully for id {Id}", id);
       return Ok(note);
    }
+
+    [HttpGet]
+    [Route("notes/alias/{alias}")]
+    public async Task<IActionResult> GetNoteByAlias(string alias,
+        CancellationToken cancellationToken)
+    {
+        var note = await _notesRepository.GetSummaryNoteByAlias(alias,
+            cancellationToken);
+       if (note is null)
+       {
+           _logger.LogInformation("Note not found for alias {Alias}", alias);
+           return NoContent();
+       }
+
+       _logger.LogInformation("GetNoteByAlias run successfully for alias {Alias} and found note with id {Id}", alias, note.Id);
+       return Ok(note);
+   }
 }

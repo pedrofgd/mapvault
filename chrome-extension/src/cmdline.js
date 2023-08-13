@@ -1,4 +1,4 @@
-import { createNote, createRemark } from "./api.js";
+import { createNote, createRemark, getNoteByAlias } from "./api.js";
 import { host, pathname } from "./index.js";
 import { getLocationMetadata, storeNoteId } from "./storage.js";
 
@@ -52,18 +52,28 @@ export async function processCommand(command, location) {
     
     if (token === "new") {
         // TODO: parse arguments and flags
-        const nameArgument = command.slice(i+1, command.length);
-        const note = await createNote(nameArgument, location);
+        const argument = command.slice(i+1, command.length).split("--");
+        const nameArgument = argument[0];
+        const aliasArgument = argument[1];
+        const alias = aliasArgument.split(" ")[1];
+
+        const note = await createNote(nameArgument, alias, location);
         storeNoteId(note.id, host, pathname);
         console.log(note);
     } else if (token === "rk") {
         const argument = command.slice(i+1, command.length);
+        console.log('remark argument: ', argument);
         
         const locationMetadata = getLocationMetadata();
         if (!locationMetadata.noteId) return "Erro: crie uma nova primeiro";
 
         await createRemark(argument, locationMetadata.noteId);
-        console.log('remark argument: ', argument);
+    } else if (token == "use") {
+        const argument = command.slice(i+1, command.length);
+        console.log("use argument: ", argument);
+
+        const note = await getNoteByAlias(argument);
+        await storeNoteId(note.id);
     } else {
         console.log("erro");
         return "Erro: comando não existe";

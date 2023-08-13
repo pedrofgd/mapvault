@@ -46,13 +46,35 @@ public class NotesRepository : RepositoryBase<Note>, INotesRepository
       }
    }
 
-   public async Task<List<string>> SearchNotesByTitle(string title, CancellationToken cancellationToken)
+    public async Task<List<string>> SearchNotesByTitle(string title, 
+        CancellationToken cancellationToken)
+    {
+        var filter = Builders<Note>.Filter.Regex(field => field.Title, 
+           new BsonRegularExpression($"{title}", "i"));
+        var cursor = await Collection.FindAsync(filter, 
+            cancellationToken: cancellationToken);
+        var list = cursor.ToList(cancellationToken: cancellationToken);
+
+        return !list.Any() ? new List<string>() : list.Select(x => x.Title).ToList()!;
+    }
+
+   public async Task<SummaryNoteQueryDto> GetSummaryNoteByAlias(string alias,
+        CancellationToken cancellationToken)
    {
-      var filter = Builders<Note>.Filter.Regex(field => field.Title, 
-         new BsonRegularExpression($"{title}", "i"));
-      var cursor = await Collection.FindAsync(filter, cancellationToken: cancellationToken);
-      var list = cursor.ToList(cancellationToken: cancellationToken);
-      
-      return !list.Any() ? new List<string>() : list.Select(x => x.Title).ToList()!;
+        var filter = Builders<Note>.Filter.Eq(note => note.Alias, alias);
+        var customProjection = Builders<Note>.Projection.Expression(u =>
+            new SummaryNoteQueryDto
+            {
+                Id = u.Id,
+                Title = u.Title,
+                Categories = u.Categories,
+                Description = u.Description,
+                ExceptionMessage = u.ExceptionMessage.Message
+            });
+
+        return await Collection
+            .Find(filter)
+            .Project(customProjection)
+            .SingleOrDefaultAsync(cancellationToken: cancellationToken);
    }
 }
