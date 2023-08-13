@@ -6,8 +6,8 @@ namespace MapVault.Utils;
 
 public class HighlightExceptionMessage
 {
-    private readonly ILogger<HighlightExceptionMessage> _logger;
     private readonly IHighlightMessageClient _highlightMessageClient;
+    private readonly ILogger<HighlightExceptionMessage> _logger;
     private readonly INotesRepository _notesRepository;
 
     public HighlightExceptionMessage(

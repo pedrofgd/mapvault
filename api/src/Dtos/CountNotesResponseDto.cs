@@ -2,5 +2,5 @@ namespace MapVault.Dtos;
 
 public class CountNotesResponseDto
 {
-   public long Total { get; set; }
+    public long Total { get; set; }
 }

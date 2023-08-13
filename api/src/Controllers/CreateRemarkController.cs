@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
-using MapVault.Repositories;
 using MapVault.Dtos;
+using MapVault.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MapVault.Controllers;
 
 [ApiController]
 [Route("api/v1")]
-public class CreateRemarkController : ControllerBase 
+public class CreateRemarkController : ControllerBase
 {
     private readonly ILogger<CreateRemarkController> _logger;
     private readonly INotesRepository _notesRepository;

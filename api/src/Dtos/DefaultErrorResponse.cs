@@ -2,10 +2,10 @@ namespace MapVault.Dtos;
 
 public class DefaultErrorResponse
 {
-   private string ErrorMessage { get; set; }
+    public DefaultErrorResponse(string errorMessage)
+    {
+        ErrorMessage = errorMessage;
+    }
 
-   public DefaultErrorResponse(string errorMessage)
-   {
-      ErrorMessage = errorMessage;
-   }
+    private string ErrorMessage { get; }
 }

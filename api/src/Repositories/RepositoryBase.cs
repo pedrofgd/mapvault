@@ -20,7 +20,7 @@ public abstract class RepositoryBase<TEntity> where TEntity : Entity
 
         return await Collection
             .Find(filter)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<bool> SaveOrUpdateAsync(TEntity entity, CancellationToken cancellationToken)
@@ -30,7 +30,7 @@ public abstract class RepositoryBase<TEntity> where TEntity : Entity
                 doc => doc.Id == entity.Id,
                 entity,
                 new ReplaceOptions { IsUpsert = true },
-                cancellationToken: cancellationToken);
+                cancellationToken);
 
         if (replaceOneResult.MatchedCount == 1)
             return replaceOneResult.ModifiedCount == 1;

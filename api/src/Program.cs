@@ -9,11 +9,13 @@ if (!builder.Environment.IsDevelopment())
 
 const string CORS_POLICY = "DefaultCors";
 // TODO: configure for production
-builder.Services.AddCors(opt => {
-    opt.AddPolicy(CORS_POLICY, policy => {
-            policy.AllowAnyOrigin();
-            policy.AllowAnyHeader();
-            policy.AllowAnyMethod();
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(CORS_POLICY, policy =>
+    {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
     });
 });
 

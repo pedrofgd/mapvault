@@ -16,10 +16,10 @@ public class SearchController : ControllerBase
     {
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _notesRepository = repository ?? throw new ArgumentNullException(nameof(repository));
-        
+
         _logger.LogInformation("SearchController has been started");
     }
-    
+
     [HttpGet]
     [Route("search/notes/{title}")]
     public async Task<IActionResult> SearchNotesByTitle(string title, CancellationToken cancellationToken)

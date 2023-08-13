@@ -1,7 +1,8 @@
 // issue #20
 db.notes.updateMany(
-    { },
-    { $rename: {
+    {},
+    {
+        $rename: {
             'CreatedAt': 'createdAt',
             'ModifiedAt': 'modifiedAt',
             'Title': 'title',

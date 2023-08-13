@@ -14,11 +14,11 @@ public static class MapVaultPersistenceExtensions
         var serviceProvider = services.BuildServiceProvider();
         var mongoDbClient = MongoDbConnectionFactory
             .Factory(serviceProvider.GetRequiredService<ILogger<MongoDbConnectionFactory>>())
-            .Connect("mapvault", 
+            .Connect("mapvault",
                 configuration["ConnectionStrings:MongoDb"]);
 
         services.AddSingleton(mongoDbClient);
-        
+
         return services;
     }
 }

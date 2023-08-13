@@ -6,7 +6,7 @@ namespace MapVault.Data.Mappings;
 public class NoteMap : DatabaseMap
 {
     public static NoteMap Map => new();
-    
+
     public override void Fields()
     {
         BsonClassMap.RegisterClassMap<Note>(map =>
