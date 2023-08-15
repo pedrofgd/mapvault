@@ -7,7 +7,7 @@ public class ExceptionMessage
         Message = message;
     }
 
-    public string? Message { get; }
+    public string? Message { get; private set; }
     public IEnumerable<string>? Valuables { get; private set; }
 
     public void RegisterValuableFragments(IEnumerable<string> valuable)
