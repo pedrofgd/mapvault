@@ -65,7 +65,7 @@ export async function processCommand(command, location) {
         console.log('remark argument: ', argument);
         
         const locationMetadata = getLocationMetadata();
-        if (!locationMetadata.noteId) return "Erro: crie uma nova primeiro";
+        if (!locationMetadata.noteId) return "Erro: crie ou use uma nota primeiro";
 
         await createRemark(argument, locationMetadata.noteId);
     } else if (token == "use") {

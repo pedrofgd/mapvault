@@ -36,7 +36,10 @@ export async function load(host, pathname) {
     const result = await chrome.storage.local.get({ highlights: {} });
     const location = host + pathname;
     
-    NOTE_ID_CURRENT_LOCATION = result.highlights[location].noteId;
+    if (result.highlights[location])
+    {
+        NOTE_ID_CURRENT_LOCATION = result.highlights[location].noteId;
+    }
 
     return result.highlights[location] || [];
 }
