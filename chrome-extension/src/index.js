@@ -75,7 +75,7 @@ async function handleCmdlineKeydown(event) {
             command += " ";
             break;
         case "Enter":
-            var err = await processCommand(command, host + pathname);
+            var err = await processCommand(command);
             if (err) {
                 alert(err);
             } else {

@@ -36,7 +36,7 @@ export function displayCommand(command) {
     cmdlineEl.innerHTML = ':' + command;
 }
 
-export async function processCommand(command, location) {
+export async function processCommand(command) {
     let i = 0;
     let token = "";
     // identity command
@@ -49,15 +49,17 @@ export async function processCommand(command, location) {
             i++;
         }
     }
+
+    const acceptedCommands = {
+        new(arg) { newCommand(arg) },
+        rk(arg) { remarkCommand(arg) },
+        use(arg) { useCommand(arg) }
+    };
     
-    const arg = command.slice(i+1, command.length);
-    
-    if (token === "new") {
-        await newCommand(arg);
-    } else if (token === "rk") {
-        await remarkCommand(arg);
-    } else if (token == "use") {
-        await useCommand(arg);
+    const argument = command.slice(i+1, command.length);
+    const processor = acceptedCommands[token];
+    if (processor) {
+        await processor(argument);
     } else {
         console.log("erro");
         return "Erro: comando não existe";
