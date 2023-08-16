@@ -1,6 +1,6 @@
-import { createNote, createRemark, getNoteByAlias } from "./api.js";
-import { host, pathname } from "./index.js";
-import { getLocationMetadata, storeNoteId } from "./storage.js";
+import { newCommand } from "./new.js";
+import { remarkCommand } from "./remark.js";
+import { useCommand } from "./use.js";
 
 const CMDLINE_ID = "highlighter-cmdline";
 
@@ -50,30 +50,14 @@ export async function processCommand(command, location) {
         }
     }
     
+    const arg = command.slice(i+1, command.length);
+    
     if (token === "new") {
-        // TODO: parse arguments and flags
-        const argument = command.slice(i+1, command.length).split("--");
-        const nameArgument = argument[0];
-        const aliasArgument = argument[1];
-        const alias = aliasArgument.split(" ")[1];
-
-        const note = await createNote(nameArgument, alias, location);
-        storeNoteId(note.id, host, pathname);
-        console.log(note);
+        await newCommand(arg);
     } else if (token === "rk") {
-        const argument = command.slice(i+1, command.length);
-        console.log('remark argument: ', argument);
-        
-        const locationMetadata = getLocationMetadata();
-        if (!locationMetadata.noteId) return "Erro: crie ou use uma nota primeiro";
-
-        await createRemark(argument, locationMetadata.noteId);
+        await remarkCommand(arg);
     } else if (token == "use") {
-        const argument = command.slice(i+1, command.length);
-        console.log("use argument: ", argument);
-
-        const note = await getNoteByAlias(argument);
-        await storeNoteId(note.id);
+        await useCommand(arg);
     } else {
         console.log("erro");
         return "Erro: comando não existe";

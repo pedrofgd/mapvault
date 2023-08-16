@@ -1,3 +1,4 @@
+// TODO: not available after page refresh
 let NOTE_ID_CURRENT_LOCATION = "";
 
 export async function storeHighlight(selection, host, pathname) {

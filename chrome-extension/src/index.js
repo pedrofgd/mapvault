@@ -1,5 +1,5 @@
 import { storeHighlight, load } from './storage.js'
-import { cmdlineToogle, displayCommand, processCommand } from './cmdline.js'
+import { cmdlineToogle, displayCommand, processCommand } from './cmdline/index.js'
 
 export const host = location.host;
 export const pathname = location.pathname;

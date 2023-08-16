@@ -21,7 +21,7 @@ public class Note : Entity
     public DateTime? CreatedAt { get; }
     public DateTime? ModifiedAt { get; private set; }
     public string? Title { get; private set; }
-    public string? Alias { get; } // TODO: create a UK constraint
+    public string? Alias { get; private set; } // TODO: create a UK constraint
     public string[]? Categories { get; private set; }
     public string? Description { get; private set; }
     public ExceptionMessage ExceptionMessage { get; private set; }
