@@ -61,7 +61,6 @@ export async function processCommand(command) {
     if (processor) {
         await processor(argument);
     } else {
-        console.log("erro");
         return "Erro: comando não existe";
     }
 }

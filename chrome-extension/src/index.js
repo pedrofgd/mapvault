@@ -1,5 +1,6 @@
-import { storeHighlight, load } from './storage.js'
 import { cmdlineToogle, displayCommand, processCommand } from './cmdline/index.js'
+import { applyExistingHighlights, handleHighlightKeydown } from './highlight/index.js';
+import { clearStorageForLocation } from './storage.js';
 
 export const host = location.host;
 export const pathname = location.pathname;
@@ -11,51 +12,6 @@ const Mode = {
 
 let mode = Mode.Highlight;
 let command = "";
-
-async function highlightAndStore() {
-  let selection = window.getSelection().getRangeAt(0);
-
-  let content = document.createElement("span");
-  content.setAttribute("style", 
-    "background-color: yellow; " + 
-    "box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;");
-
-  selection.surroundContents(content);
-
-  await storeHighlight(selection, host, pathname); 
-}
-
-async function applyExistingHighlights() {
-    console.log('Loading highlights in this page');
-    
-    const data = await load(host, pathname);
-    console.log(data);
-
-    // TODO: fix apply highlights to page
-    return;
-
-    let pageContent = document.body.innerHTML;
-
-    data.forEach(function(html) {
-        let tempElement = document.createElement('div');
-        let content = tempElement.firstChild.innerHTML;
-        tempElement.innerHTML = html;
-
-        let regex = new RegExp(content, 'g');
-        pageContent = pageContent.replace(regex, html);
-    });
-
-    document.body.innerHTML = pageContent;
-}
-
-function handleHighlighKeydown(event) {
-    const key = event.key;
-    switch (key) {
-        case "h":
-            highlightAndStore();
-            break;
-    }
-}
 
 async function handleCmdlineKeydown(event) {
     event.preventDefault();
@@ -123,7 +79,8 @@ function toogleMode() {
 function handleKeydownEvent(event) {
     const key = event.key;
     if (key === ":") toogleMode();
-    else if (mode === Mode.Highlight) handleHighlighKeydown(event);
+    else if (key == "C") clearStorageForLocation();
+    else if (mode === Mode.Highlight) handleHighlightKeydown(event);
     else if (mode === Mode.Cmdline) handleCmdlineKeydown(event);
 }
 
