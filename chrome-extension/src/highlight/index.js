@@ -1,6 +1,6 @@
 import { storeHighlight, load } from "../storage.js";
 
-const HIGHLIGHT_DEFAULT_ID = "mapvault-highligh-span";
+const HIGHLIGHT_DEFAULT_ID = "mapvault-highlight-span";
 
 export async function handleHighlightKeydown(event) {
     const acceptedKeys = {
@@ -15,25 +15,16 @@ export async function handleHighlightKeydown(event) {
 
 export async function applyExistingHighlights() {
     const highlights = await load();
-    const selectedRanges = [];
     if (highlights?.selections) {
         highlights.selections.forEach((selection) => {
             const serializedRange = selection.serializedRange;
-            console.log(serializedRange);
-            const range = deserializeRange(serializedRange);
-            selectedRanges.push(range);
+            const range = deserializeRange(serializedRange); 
+            applyHighlightStyle(range);
         });
     }
-
-    // Must retrieve all original ranges before create new elements
-    // TODO: span tags for style are a problem to highlight new things
-    selectedRanges.forEach((range) => {
-        applyHighlightStyle(range);
-    })
 }
 
 async function highlightAndStoreSelection() {
-    console.log("highlight and store");
     const selectedRange = window.getSelection().getRangeAt(0);
     const serializedRange = serializeRange(selectedRange);
     await storeHighlight(serializedRange);
@@ -87,7 +78,8 @@ function getPathFromNode(node) {
         let segment = {
             tag: node.nodeName.toLowerCase(),
             id: node.id ?? null,
-            className: node.className ?? null
+            className: node.className ?? null,
+            index: Array.prototype.indexOf.call(node.parentNode.childNodes, node)
         };
 
         // insert in front of path
@@ -109,7 +101,7 @@ function getNodeFromPath(path) {
         let foundNode = null;
         if (tag === "#text") {
             const childNodes = node.childNodes;
-            foundNode = childNodes[0]; // TODO: find the correct text
+            foundNode = childNodes[segment.index];
         } else if (id) {
             foundNode = node.querySelector(`${tag}#${id}`);
         } else if (className) {
@@ -119,7 +111,8 @@ function getNodeFromPath(path) {
         }
 
         if (!foundNode) {
-            console.log(`node not found for segment: ${JSON.stringify(segment)}`);
+            const jsonSegment = JSON.stringify(segment);
+            console.log(`node not found for segment: ${jsonSegment}`);
             return null;
         }
 
