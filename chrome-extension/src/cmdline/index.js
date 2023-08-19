@@ -54,6 +54,7 @@ export async function processCommand(command) {
         new(arg) { newCommand(arg) },
         rk(arg) { remarkCommand(arg) },
         use(arg) { useCommand(arg) }
+        // TODO: create command for sync data between server DB and chrome storage (in both directions)
     };
     
     const argument = command.slice(i+1, command.length);

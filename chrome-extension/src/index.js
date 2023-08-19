@@ -6,11 +6,11 @@ export const host = location.host;
 export const pathname = location.pathname;
 
 const Mode = {
-    Highlight: "highlight",
-    Cmdline: "cmdline",
+    HIGHLIGHT: "highlight",
+    CMDLINE: "cmdline",
 };
 
-let mode = Mode.Highlight;
+let mode = Mode.HIGHLIGHT;
 let command = "";
 
 async function handleCmdlineKeydown(event) {
@@ -20,6 +20,7 @@ async function handleCmdlineKeydown(event) {
     switch (key) {
         case "Meta":
         case "Escape":
+            // TODO: consider Observer Pattern for use it in cmdline/index.js
             toogleMode();
             break;
         case "Backspace":
@@ -35,6 +36,7 @@ async function handleCmdlineKeydown(event) {
             if (err) {
                 alert(err);
             } else {
+                // TODO: consider Observer Pattern for use it in cmdline/index.js
                 toogleMode();
             }
         // Ignored keys. TODO: review strategy
@@ -60,18 +62,18 @@ async function handleCmdlineKeydown(event) {
     }
 
     // If still in CMDLINE mode, display it
-    if (mode === Mode.Cmdline)
+    if (mode === Mode.CMDLINE)
         displayCommand(command);
 }
 
 function toogleMode() {
-    // TODO: refact for elegance
-    const currIsCmdline = mode === Mode.Cmdline;
+    // TODO: refact for elegance (consider proper Strategy Pattern)
+    const currIsCmdline = mode === Mode.CMDLINE;
     if (currIsCmdline) {
-        mode = Mode.Highlight;
+        mode = Mode.HIGHLIGHT;
         command = "";
     } else {
-        mode = Mode.Cmdline;
+        mode = Mode.CMDLINE;
     }
     cmdlineToogle(!currIsCmdline, command);
 }
@@ -80,8 +82,8 @@ function handleKeydownEvent(event) {
     const key = event.key;
     if (key === ":") toogleMode();
     else if (key == "C") clearStorageForLocation();
-    else if (mode === Mode.Highlight) handleHighlightKeydown(event);
-    else if (mode === Mode.Cmdline) handleCmdlineKeydown(event);
+    else if (mode === Mode.HIGHLIGHT) handleHighlightKeydown(event);
+    else if (mode === Mode.CMDLINE) handleCmdlineKeydown(event);
 }
 
 export async function init() {

@@ -1,5 +1,7 @@
 import { storeHighlight, load } from "../storage.js";
 
+const HIGHLIGHT_DEFAULT_ID = "mapvault-highligh-span";
+
 export async function handleHighlightKeydown(event) {
     const acceptedKeys = {
         h() { highlightAndStoreSelection() },
@@ -13,22 +15,29 @@ export async function handleHighlightKeydown(event) {
 
 export async function applyExistingHighlights() {
     const highlights = await load();
+    const selectedRanges = [];
     if (highlights?.selections) {
         highlights.selections.forEach((selection) => {
             const serializedRange = selection.serializedRange;
             console.log(serializedRange);
             const range = deserializeRange(serializedRange);
-            applyHighlightStyle(range);
+            selectedRanges.push(range);
         });
     }
+
+    // Must retrieve all original ranges before create new elements
+    // TODO: span tags for style are a problem to highlight new things
+    selectedRanges.forEach((range) => {
+        applyHighlightStyle(range);
+    })
 }
 
 async function highlightAndStoreSelection() {
     console.log("highlight and store");
     const selectedRange = window.getSelection().getRangeAt(0);
     const serializedRange = serializeRange(selectedRange);
-
     await storeHighlight(serializedRange);
+
     applyHighlightStyle(selectedRange);
 }
 
@@ -37,6 +46,7 @@ function applyHighlightStyle(range) {
     span.setAttribute("style", 
         "background-color: yellow; " + 
         "box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;");
+    span.setAttribute("id", HIGHLIGHT_DEFAULT_ID);
 
     range.surroundContents(span);
 }
@@ -98,8 +108,8 @@ function getNodeFromPath(path) {
 
         let foundNode = null;
         if (tag === "#text") {
-            // TODO: fix how managing the selected content (this is not a node and throws an error when deserializing range)
-            foundNode = node.textContent;
+            const childNodes = node.childNodes;
+            foundNode = childNodes[0]; // TODO: find the correct text
         } else if (id) {
             foundNode = node.querySelector(`${tag}#${id}`);
         } else if (className) {
@@ -113,7 +123,6 @@ function getNodeFromPath(path) {
             return null;
         }
 
-        console.log("found node: ", foundNode);
         node = foundNode;
     })
 
