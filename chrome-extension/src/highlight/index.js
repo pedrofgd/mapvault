@@ -1,4 +1,5 @@
-import { storeHighlight, load } from "../storage.js";
+import { createRemark } from "../api.js";
+import { storeHighlight, load, getLocationMetadata } from "../storage.js";
 
 const HIGHLIGHT_DEFAULT_ID = "mapvault-highlight-span";
 
@@ -25,11 +26,20 @@ export async function applyExistingHighlights() {
 }
 
 async function highlightAndStoreSelection() {
-    const selectedRange = window.getSelection().getRangeAt(0);
+    const locationMetadata = getLocationMetadata();
+    if (!locationMetadata.noteId) {
+        alert("Erro: crie ou use uma nota primeiro");
+        return;
+    }
+
+    const selection = window.getSelection();
+    const selectedRange = selection.getRangeAt(0);
     const serializedRange = serializeRange(selectedRange);
     await storeHighlight(serializedRange);
 
     applyHighlightStyle(selectedRange);
+
+    await createRemark(`highlight: ${selection.toString()}`, locationMetadata.noteId);
 }
 
 function applyHighlightStyle(range) {
