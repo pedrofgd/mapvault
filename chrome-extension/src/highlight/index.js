@@ -36,10 +36,10 @@ function applyHighlightStyle(range) {
     const span = document.createElement("span");
     span.setAttribute("style", 
         "background-color: yellow; " + 
-        "box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;");
+        "box-shadow: rgba(0, 0, 0, 0.05) 0px 5px 20px;");
     span.setAttribute("id", HIGHLIGHT_DEFAULT_ID);
-
-    range.surroundContents(span);
+    span.appendChild(range.extractContents());
+    range.insertNode(span);
 }
 
 function serializeRange(selectedRange) {
@@ -107,7 +107,7 @@ function getNodeFromPath(path) {
         } else if (className) {
             foundNode = node.querySelector(`${tag}.${className}`);
         } else {
-            foundNode = node.querySelector(tag);
+            foundNode = node.childNodes[segment.index];
         }
 
         if (!foundNode) {
