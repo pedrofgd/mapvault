@@ -2,13 +2,22 @@ import { createRemark } from "../api.js";
 import { storeHighlight, load, getLocationMetadata } from "../storage.js";
 
 const HIGHLIGHT_DEFAULT_ID = "mapvault-highlight-span";
+const KEY_ACTIONS = {
+    Highlight: "Highlight"
+};
+
+let actionKeysPressed = {};
 
 export async function handleHighlightKeydown(event) {
-    const acceptedKeys = {
-        h() { highlightAndStoreSelection() },
+    const key = event.key;
+    registerActionKeyPressed(key);
+    const keyAction = mapKeyAction(key);
+
+    const acceptedActions = {
+        Highlight() { highlightAndStoreSelection() },
     };
 
-    const processor = acceptedKeys[event.key];
+    const processor = acceptedActions[keyAction];
     if (processor) {
         await processor();
     }
@@ -25,21 +34,40 @@ export async function applyExistingHighlights() {
     }
 }
 
+function registerActionKeyPressed(key) {
+    if (key.length !== 1) {
+        actionKeysPressed[key] = true;
+        setTimeout(() => {actionKeysPressed = {}}, 500);
+    }
+}
+
+function mapKeyAction(key) {
+    if (actionKeysPressed["Control"] && key === "h") {
+        actionKeysPressed = {};
+        return KEY_ACTIONS.Highlight;
+    }
+    return key;
+}
+
 async function highlightAndStoreSelection() {
+    const selection = window.getSelection();
+    const selectedContent = selection.toString();
+    if (selectedContent === '')
+        return;
+
     const locationMetadata = getLocationMetadata();
     if (!locationMetadata.noteId) {
         alert("Erro: crie ou use uma nota primeiro");
         return;
     }
 
-    const selection = window.getSelection();
     const selectedRange = selection.getRangeAt(0);
     const serializedRange = serializeRange(selectedRange);
     await storeHighlight(serializedRange);
 
     applyHighlightStyle(selectedRange);
 
-    await createRemark(`highlight: ${selection.toString()}`, locationMetadata.noteId);
+    await createRemark(`highlight: ${selectedContent}`, locationMetadata.noteId);
 }
 
 function applyHighlightStyle(range) {
