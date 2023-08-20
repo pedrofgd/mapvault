@@ -1,8 +1,14 @@
+import { mode, Mode } from "../index.js";
+import { toggleMode } from "../index.js";
 import { newCommand } from "./new.js";
 import { remarkCommand } from "./remark.js";
 import { useCommand } from "./use.js";
 
 const CMDLINE_ID = "highlighter-cmdline";
+
+// TODO: restrict access
+let cmdlineEl = null;
+let command = "";
 
 export function cmdlineToogle(display) {
     if (display) {
@@ -13,8 +19,44 @@ export function cmdlineToogle(display) {
     }
 }
 
+export async function handleCmdlineKeydownTemp(event) {
+    event.preventDefault();
+
+    const key = event.key;
+    const keyAction = key.length === 1 ? "Char" : key;
+    
+    const acceptedKeys = {
+        Enter(_) { processCommand() },
+        Backspace(_) { backspaceCommandChar() },
+        Meta(_) { leaveCmdlineMode() },
+        Escape(_) { leaveCmdlineMode() },
+        Char(key) { command += key }
+    }
+
+    const processor = acceptedKeys[keyAction];
+    if (processor) {
+        await processor(key);
+    }
+
+    if (mode === Mode.CMDLINE)
+        displayContent(command);
+}
+
+function backspaceCommandChar() {
+    if (command === "") {
+        toggleMode();
+        return;
+    }
+    command = command.slice(0, -1);
+}
+
+function leaveCmdlineMode() {
+    command = "";
+    toggleMode();
+}
+
 function createCmdline() {
-    var cmdlineEl = document.createElement("div");
+    cmdlineEl = document.createElement("div");
 
     cmdlineEl.innerHTML = ":";
     cmdlineEl.setAttribute("style", 
@@ -31,12 +73,13 @@ function createCmdline() {
     document.body.appendChild(cmdlineEl);
 }
 
-export function displayCommand(command) {
-    var cmdlineEl = document.getElementById(CMDLINE_ID);
-    cmdlineEl.innerHTML = ':' + command;
+function displayContent(content) {
+    if (cmdlineEl) {
+        cmdlineEl.innerHTML = ':' + content;
+    }
 }
 
-export async function processCommand(command) {
+async function processCommand() {
     let i = 0;
     let token = "";
     // identity command
@@ -51,17 +94,23 @@ export async function processCommand(command) {
     }
 
     const acceptedCommands = {
-        new(arg) { newCommand(arg) },
-        rk(arg) { remarkCommand(arg) },
-        use(arg) { useCommand(arg) }
-        // TODO: create command for sync data between server DB and chrome storage (in both directions)
+        async new(arg) { await newCommand(arg) },
+        async rk(arg) { await remarkCommand(arg) },
+        async use(arg) { await useCommand(arg) }
     };
     
     const argument = command.slice(i+1, command.length);
     const processor = acceptedCommands[token];
     if (processor) {
         await processor(argument);
+        displayContent("Done");
+        await delayAsync(500);
+        leaveCmdlineMode();
     } else {
-        return "Erro: comando não existe";
+        alert("Erro: comando não existe");
     }
+}
+
+async function delayAsync(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
