@@ -14,17 +14,12 @@ export async function storeHighlight(serializedRange) {
 
     highlights[location].selections.push({
         serializedRange,
-        // TODO: set corret node id (return error if not defined)
-        // TODO: create temporary note in the future
-        noteId: "note_id",
     });
 
-    chrome.storage.local.set({ highlights: highlights }).then(() => {
-        console.log(highlights);
-    });
+    await chrome.storage.local.set({ highlights: highlights });
 }
 
-export async function storeNoteId(noteId, host, pathname) {
+export async function storeNoteId(noteId) {
     console.log('Storing note id created for this location');
     console.log(noteId);
 
@@ -34,6 +29,8 @@ export async function storeNoteId(noteId, host, pathname) {
     
     highlights[location].noteId = noteId;
     NOTE_ID_CURRENT_LOCATION = noteId;
+
+    await chrome.storage.local.set({ highlights: highlights });
 }
 
 export async function load() {
@@ -42,6 +39,7 @@ export async function load() {
     
     if (result.highlights[location])
     {
+        console.log(result.highlights[location].noteId);
         NOTE_ID_CURRENT_LOCATION = result.highlights[location].noteId;
     }
 
