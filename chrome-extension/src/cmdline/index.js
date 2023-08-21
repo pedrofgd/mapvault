@@ -9,6 +9,7 @@ const CMDLINE_ID = "highlighter-cmdline";
 // TODO: restrict access
 let cmdlineEl = null;
 let command = "";
+let actionKeysPressed = {};
 
 export function cmdlineToogle(display) {
     if (display) {
@@ -23,23 +24,32 @@ export async function handleCmdlineKeydownTemp(event) {
     event.preventDefault();
 
     const key = event.key;
-    const keyAction = key.length === 1 ? "Char" : key;
-    
-    const acceptedKeys = {
-        Enter(_) { processCommand() },
+    actionKeysPressed[event.key] = true;
+    const keyAction = mapKeyAction(key);
+
+    const acceptedActions = {
+        async Enter(_) { await processCommand() },
         Backspace(_) { backspaceCommandChar() },
         Meta(_) { leaveCmdlineMode() },
         Escape(_) { leaveCmdlineMode() },
         Char(key) { command += key }
     }
 
-    const processor = acceptedKeys[keyAction];
+    const processor = acceptedActions[keyAction];
     if (processor) {
         await processor(key);
     }
 
     if (mode === Mode.CMDLINE)
         displayContent(command);
+}
+
+function mapKeyAction(key) {
+    if (key.length === 1) {
+        return "Char";
+    }
+
+    return key;
 }
 
 function backspaceCommandChar() {
