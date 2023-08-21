@@ -3,16 +3,19 @@ import { host, pathname } from "./../index.js";
 import { storeNoteId } from "../storage.js";
 
 export async function newCommand(arg) {
-    // TODO: parse arguments and flags
     const args = arg.split("-");
     const nameArgument = args[0];
 
     const parsedArguments = parseArguments(args.slice(1));
 
+    // argument/flag check
     const alias = parsedArguments["a"] ?? null;
+    const setNewAsDefault = "n" in parsedArguments ? false : true;
 
     const note = await createNote(nameArgument, alias, location);
-    storeNoteId(note.id, host, pathname);
+    if (setNewAsDefault) {
+        storeNoteId(note.id, host, pathname);
+    }
 
     console.log(note);
 }
