@@ -1,10 +1,7 @@
 import { createRemark } from "../api.js";
-import { storeHighlight, load, getLocationMetadata } from "../storage.js";
+import { storeHighlight, load, getLocationMetadata, clearStorageForLocation } from "../storage.js";
 
 const HIGHLIGHT_DEFAULT_ID = "mapvault-highlight-span";
-const KEY_ACTIONS = {
-    Highlight: "Highlight"
-};
 
 let actionKeysPressed = {};
 
@@ -14,13 +11,19 @@ export async function handleHighlightKeydown(event) {
     const keyAction = mapKeyAction(key);
 
     const acceptedActions = {
-        Highlight() { highlightAndStoreSelection() },
+        async h() { return await highlightAndStoreSelection() },
+        Escape() { return false; },
+        // TODO: only for testing... remove at some point
+        async C() { await clearStorageForLocation(); return true; }
     };
 
     const processor = acceptedActions[keyAction];
     if (processor) {
-        await processor();
+        const continueInMode = await processor();
+        if (!continueInMode) return false;
     }
+
+    return true;
 }
 
 export async function applyExistingHighlights() {
@@ -42,10 +45,7 @@ function registerActionKeyPressed(key) {
 }
 
 function mapKeyAction(key) {
-    if (actionKeysPressed["Control"] && key === "h") {
-        actionKeysPressed = {};
-        return KEY_ACTIONS.Highlight;
-    }
+    // TODO: will handle multiple keys for action here
     return key;
 }
 
@@ -67,7 +67,10 @@ async function highlightAndStoreSelection() {
 
     applyHighlightStyle(selectedRange);
 
-    await createRemark(`highlight: ${selectedContent}`, locationMetadata.noteId);
+    await createRemark(`highlight: ${selectedContent}`,
+        locationMetadata.noteId);
+
+    return true;
 }
 
 function applyHighlightStyle(range) {
