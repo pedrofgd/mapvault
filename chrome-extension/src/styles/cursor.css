@@ -1,0 +1,21 @@
+.mapvault-highlight-cmdline-cursor {
+    display: inline;
+    width: 1px; /* For single-line cursor */
+    height: 100%;
+    min-height: 1em; /* Ensure cursor is visible when empty */
+    background-color: #F4B77D;
+    animation: blink-animation 0.8s infinite;
+}
+
+.mapvault-highlight-cmdline-cursor-block {
+    width: 10px;
+}
+
+@keyframes blink-animation {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
