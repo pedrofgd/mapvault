@@ -11,7 +11,9 @@
                 "contentScript.js"
             ],
             "css": [
-                "src/styles/cursor.css"
+                "src/styles/cursor.css",
+                "src/styles/cmdline.css",
+                "src/styles/highlight.css"
             ]
         }
     ],

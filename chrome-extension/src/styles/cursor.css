@@ -1,4 +1,4 @@
-.cursor {
+.mapvault-highlight-cmdline-cursor {
     display: inline;
     width: 1px; /* For single-line cursor */
     height: 100%;
@@ -7,7 +7,7 @@
     animation: blink-animation 0.8s infinite;
 }
 
-.cursor-block {
+.mapvault-highlight-cmdline-cursor-block {
     width: 10px;
 }
 

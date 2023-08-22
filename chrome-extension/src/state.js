@@ -8,7 +8,7 @@ const Mode = {
 };
 
 const ENABLE_FEATURES_COMMAND = "F6";
-const LOAD_AND_ENABLE = true; // Skip DISABLED mode. Useful for local testing
+const LOAD_AND_ENABLE = true; // Skip DISABLED mode if true. Useful for local testing
 
 // TODO: think about refactor this as a factory and return a state object
 // and initialize modes from here

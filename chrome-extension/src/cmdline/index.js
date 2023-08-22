@@ -4,8 +4,8 @@ import { useCommand } from "./use.js";
 
 const CMDLINE_ID = "mapvault-highlight-cmdline";
 const CMDLINE_CONTENT_ID = "mapvault-highlight-cmdline-content";
-const CURSOR_BASE_CLASS = "cursor";
-const CURSOR_BLOCK_CLASS = "cursor-block";
+const CURSOR_BASE_CLASS = "mapvault-highlight-cmdline-cursor";
+const CURSOR_BLOCK_CLASS = "mapvault-highlight-cmdline-cursor-block";
 
 // TODO: restrict access
 let cmdlineEl = null;
@@ -43,8 +43,6 @@ export async function handleCmdlineKeydown(event) {
         }
     }
 
-    console.log(command);
-    console.log(cursorPosition);
     displayContent(command);
     return true;
 }
@@ -86,17 +84,6 @@ function addCharToCommand(key) {
 
 function createCmdline() {
     cmdlineEl = document.createElement("div");
-
-    cmdlineEl.setAttribute("style", 
-        "display: flex; " + 
-        "align-items: center; " +
-        "position: fixed; " +
-        "left: 0; bottom: 0; " +
-        "width: 100%; " + 
-        "background-color: #3b3947; color: white; " +
-        "padding: 3px 0px 3px 3px; " +
-        "font-family: 'Fira Code'; font-size: 1rem; " +
-        "z-index: 5432;");
     cmdlineEl.setAttribute("id", CMDLINE_ID);
 
     cmdlineContent = document.createElement("span");

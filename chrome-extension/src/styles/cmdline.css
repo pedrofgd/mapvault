@@ -1,0 +1,13 @@
+#mapvault-highlight-cmdline {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    background-color: #3b3947;
+    color: white;
+    padding: 3px 0px 3px 3px;
+    font-family: 'Fira Code'; font-size: 1rem;
+    z-index: 5432;
+}

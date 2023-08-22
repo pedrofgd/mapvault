@@ -10,6 +10,7 @@ export async function handleHighlightKeydown(event) {
     registerActionKeyPressed(key);
     const keyAction = mapKeyAction(key);
 
+    // TODO: being called for every keydown... refactor for create only once
     const acceptedActions = {
         async h() { return await highlightAndStoreSelection() },
         Escape() { return false; },
@@ -53,12 +54,12 @@ async function highlightAndStoreSelection() {
     const selection = window.getSelection();
     const selectedContent = selection.toString();
     if (selectedContent === '')
-        return;
+        return true;
 
     const locationMetadata = getLocationMetadata();
     if (!locationMetadata.noteId) {
         alert("Erro: crie ou use uma nota primeiro");
-        return;
+        return true; // Continue in highlight mode
     }
 
     const selectedRange = selection.getRangeAt(0);
@@ -75,9 +76,6 @@ async function highlightAndStoreSelection() {
 
 function applyHighlightStyle(range) {
     const span = document.createElement("span");
-    span.setAttribute("style", 
-        "background-color: yellow; " + 
-        "box-shadow: rgba(0, 0, 0, 0.05) 0px 5px 20px;");
     span.setAttribute("id", HIGHLIGHT_DEFAULT_ID);
     span.appendChild(range.extractContents());
     range.insertNode(span);
