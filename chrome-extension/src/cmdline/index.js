@@ -2,10 +2,16 @@ import { newCommand } from "./new.js";
 import { remarkCommand } from "./remark.js";
 import { useCommand } from "./use.js";
 
-const CMDLINE_ID = "highlighter-cmdline";
+const CMDLINE_ID = "mapvault-highlight-cmdline";
+const CMDLINE_CONTENT_ID = "mapvault-highlight-cmdline-content";
+const CURSOR_BASE_CLASS = "cursor";
+const CURSOR_BLOCK_CLASS = "cursor-block";
 
 // TODO: restrict access
 let cmdlineEl = null;
+let cmdlineContent = null;
+let cursor = null;
+let cursorPosition = 0;
 let command = "";
 let actionKeysPressed = {};
 
@@ -26,7 +32,7 @@ export async function handleCmdlineKeydown(event) {
         Backspace(_) { return backspaceCommandChar() },
         Meta(_) { return endCmdlineMode(); },
         Escape(_) { return endCmdlineMode() },
-        Char(key) { command += key; return true; }
+        Char(key) { return addCharToCommand(key) },
     }
 
     const processor = acceptedActions[keyAction];
@@ -37,6 +43,8 @@ export async function handleCmdlineKeydown(event) {
         }
     }
 
+    console.log(command);
+    console.log(cursorPosition);
     displayContent(command);
     return true;
 }
@@ -44,7 +52,7 @@ export async function handleCmdlineKeydown(event) {
 function mapKeyAction(key) {
     if (key.length === 1) {
         return "Char";
-    }
+    } 
 
     return key;
 }
@@ -54,25 +62,34 @@ function backspaceCommandChar() {
         endCmdlineMode();
         return false; // Exit cmdline mode
     }
+
     command = command.slice(0, -1);
+    cursorPosition--;
+
     return true;
 }
 
 function endCmdlineMode() {
     command = "";
     if (cmdlineEl != null) {
-        console.log("removing cmdline element");
         cmdlineEl.remove();
         cmdlineEl = null;
     }
     return false;
 }
 
+function addCharToCommand(key) {
+    command += key;
+    cursorPosition++;
+    return true;
+}
+
 function createCmdline() {
     cmdlineEl = document.createElement("div");
 
-    cmdlineEl.innerHTML = ":";
     cmdlineEl.setAttribute("style", 
+        "display: flex; " + 
+        "align-items: center; " +
         "position: fixed; " +
         "left: 0; bottom: 0; " +
         "width: 100%; " + 
@@ -81,14 +98,28 @@ function createCmdline() {
         "font-family: 'Fira Code'; font-size: 1rem; " +
         "z-index: 5432;");
     cmdlineEl.setAttribute("id", CMDLINE_ID);
-    //TODO: blink cursor block (#F4B77D)
 
+    cmdlineContent = document.createElement("span");
+    cmdlineContent.setAttribute("id", CMDLINE_CONTENT_ID);
+    cmdlineContent.innerHTML = ":";
+
+    cursor = createCursor();
+    cmdlineEl.appendChild(cmdlineContent);
+    cmdlineEl.appendChild(cursor);
     document.body.appendChild(cmdlineEl);
 }
 
+function createCursor() {
+    const cursor = document.createElement("span");
+    cursor.classList.add(CURSOR_BASE_CLASS, CURSOR_BLOCK_CLASS);
+
+    return cursor;
+}
+
 function displayContent(content) {
-    if (cmdlineEl) {
-        cmdlineEl.innerHTML = ':' + content;
+    if (cmdlineEl && cmdlineContent) {
+        content = content.replaceAll(" ", "&nbsp;");
+        cmdlineContent.innerHTML = ':' + content;
     }
 }
 

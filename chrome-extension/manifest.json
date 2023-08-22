@@ -9,6 +9,9 @@
             "matches": ["<all_urls>"],
             "js": [
                 "contentScript.js"
+            ],
+            "css": [
+                "src/styles/cursor.css"
             ]
         }
     ],
