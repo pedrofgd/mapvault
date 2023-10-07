@@ -15,7 +15,7 @@
     "axios": "^1.2.1",
     "cors": "^2.8.5",
     "html-react-parser": "^3.0.4",
-    "next": "13.0.6",
+    "next": "13.5.4",
     "next-connect": "^0.13.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
